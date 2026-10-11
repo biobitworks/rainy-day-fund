@@ -1,0 +1,4 @@
+fastapi>=0.110,<1
+pydantic>=2,<3
+pymongo[srv]>=4.10,<5
+raindrop-ai

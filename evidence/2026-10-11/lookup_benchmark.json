@@ -1,29 +1,6 @@
 {
-  "project_id": "RDF-SFTW26-NEW-001",
-  "source_version": "RDF-LOCAL-FCO-FCG-CANDIDATE-V1",
-  "benchmark_id": "RDF-LOOKUP-LOCAL-001",
-  "task": "exact_row_id_to_priority_lookup",
-  "dataset_rows": 4000,
-  "query_count_per_run": 360,
-  "repeated_runs": 5,
-  "random_seed": 26011,
-  "index_build_ms": 0.345411,
-  "linear_scan_ms_by_run": [
-    23.133958,
-    22.566315,
-    22.099164
-  ],
-  "baseline_median_ms": 22.566315,
-  "indexed_median_ms": 0.08654,
-  "observed_speedup_x": 260.762,
-  "correctness": "PASS_SAME_RESULTS",
-  "environment": "local_python_in_memory",
-  "metric_note": "Only medians shown as validated from private executed notebook; full run arrays retained privately. Do not infer end-to-end AI improvement.",
-  "claims": {
-    "fco_fcg_performance": "NOT_TESTED",
-    "elevenlabs": "NOT_TESTED",
-    "raindrop": "NOT_TESTED",
-    "ollarma": "NOT_EXECUTED"
-  },
-  "data_provenance": "user-supplied CSV; raw rows withheld pending license and privacy review"
+  "status": "RETRACTED_SUPERSEDED",
+  "reason": "First publication included three manually specified per-run baseline timings not sourced from execution; do not use.",
+  "successor": "lookup_benchmark_v2_corrected.json",
+  "predecessor_commit": "786a8d74b2f940b2144e8f327ebc6099c4438843"
 }

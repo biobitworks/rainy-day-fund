@@ -5,6 +5,8 @@
 **Solo project · Recursive Harnessing · honest integration status**
 
 - **[Submission details, sponsor-by-sponsor build trail, evidence table and 60-second video outline](SUBMISSION_2026-10-11.md)**
+- **[Judge-facing activity feed: 20 verified, synthetic Atlas records and clear claim limits](JUDGES_ACTIVITY_FEED.md)**
+- **[Machine-readable Atlas project activity snapshot](evidence/2026-10-11/project_activity_feed.json)**
 - **[Full implemented backend, tests and accessible live-dashboard source (`review-20261011`)](https://github.com/biobitworks/rainy-day-fund/tree/review-20261011)**
 - **[Protected Vercel preview](https://rainy-day-fund-sftw26-cohw995ik-biobitworks.vercel.app/)** — reported route smoke; `UNCONFIGURED_FAIL_CLOSED`; not a public working integration
 - **YouTube 60-second demonstration:** PENDING video editing and a real public URL; no video permalink claimed.

@@ -1,0 +1,191 @@
+{
+  "schema_version": "rdf-judge-activity-feed-v1",
+  "project_id": "RDF-SFTW26-NEW-001",
+  "project_name": "Make It Rain",
+  "snapshot_at": "2026-10-11T23:52:13.828Z",
+  "source": "independent read-only MongoDB Atlas connector queries",
+  "atlas_database": "rainy_day_fund_sftw26",
+  "scope": "isolated synthetic project records, not Raindrop organization audit log",
+  "integrity_note": "Snapshot of authored event_time and observed_status as stored; event_time is not proven insertion time; no provider-origin claims without provider receipts.",
+  "input_organization_feed": "REJECTED_OUT_OF_SCOPE_NO_ROWS_REPUBLISHED",
+  "platform_verification": {
+    "mongodb_atlas": "OBSERVED_PROJECT_SCOPED_READBACK",
+    "elevenlabs_to_atlas": "NOT_VERIFIED",
+    "raindrop_cloud_correlation": "NOT_VERIFIED",
+    "vercel_live_dashboard": "NOT_VERIFIED",
+    "canonical_mmr": "NOT_COMMITTED",
+    "signing": "NOT_SIGNED"
+  },
+  "snapshot_counts": {
+    "dataset_rows": 4000,
+    "frozen_fixtures": 12,
+    "candidate_graph_objects": 6,
+    "candidate_graph_edges": 5,
+    "candidate_graph_receipts": 1
+  },
+  "activity_count": 20,
+  "activity": [
+    {
+      "event_time": "2026-10-11T17:39:00Z",
+      "collection": "progress_events",
+      "record_id": "SYN-EVENT-001",
+      "source_version": "SFTW26_SYNTHETIC_BASELINE_001",
+      "observed_status": "SYNTHETIC_EXECUTED",
+      "synthetic": true
+    },
+    {
+      "event_time": "2026-10-11T17:39:00Z",
+      "collection": "progress_events",
+      "record_id": "SYN-EVENT-002",
+      "source_version": "SFTW26_SYNTHETIC_BASELINE_001",
+      "observed_status": "SYNTHETIC_EXECUTED",
+      "synthetic": true
+    },
+    {
+      "event_time": "2026-10-11T17:40:00Z",
+      "collection": "recovery_receipts",
+      "record_id": "SYN-RECOVERY-001",
+      "source_version": "SFTW26_SYNTHETIC_BASELINE_001",
+      "observed_status": "PASSED_ATLAS_CONNECTOR_READBACK",
+      "synthetic": true
+    },
+    {
+      "event_time": "2026-10-11T17:41:00Z",
+      "collection": "eval_runs",
+      "record_id": "SYN-EVAL-V0",
+      "source_version": "SFTW26_SYNTHETIC_BASELINE_001",
+      "observed_status": "LOCAL_SYNTHETIC_REPLAY_PASS",
+      "synthetic": true
+    },
+    {
+      "event_time": "2026-10-11T17:41:00Z",
+      "collection": "eval_runs",
+      "record_id": "SYN-EVAL-V1",
+      "source_version": "SFTW26_SYNTHETIC_BASELINE_001",
+      "observed_status": "LOCAL_SYNTHETIC_REPLAY_PASS",
+      "synthetic": true
+    },
+    {
+      "event_time": "2026-10-11T17:41:00Z",
+      "collection": "harness_versions",
+      "record_id": "SYN-HARNESS-V0",
+      "source_version": "SFTW26_SYNTHETIC_BASELINE_001",
+      "observed_status": "LOCAL_SYNTHETIC_REPLAY_PASS",
+      "synthetic": true
+    },
+    {
+      "event_time": "2026-10-11T17:41:00Z",
+      "collection": "harness_versions",
+      "record_id": "SYN-HARNESS-V1",
+      "source_version": "SFTW26_SYNTHETIC_BASELINE_001",
+      "observed_status": "LOCAL_SYNTHETIC_REPLAY_PASS",
+      "synthetic": true
+    },
+    {
+      "event_time": "2026-10-11T17:41:00Z",
+      "collection": "policy_decisions",
+      "record_id": "SYN-DECISION-ADMIT",
+      "source_version": "SFTW26_SYNTHETIC_BASELINE_001",
+      "observed_status": "LOCAL_SYNTHETIC_REPLAY_PASS",
+      "synthetic": true
+    },
+    {
+      "event_time": "2026-10-11T17:41:00Z",
+      "collection": "policy_decisions",
+      "record_id": "SYN-DECISION-REJECT",
+      "source_version": "SFTW26_SYNTHETIC_BASELINE_001",
+      "observed_status": "LOCAL_SYNTHETIC_REPLAY_PASS",
+      "synthetic": true
+    },
+    {
+      "event_time": "2026-10-11T17:41:00Z",
+      "collection": "proposals",
+      "record_id": "SYN-PROPOSAL-UNSAFE",
+      "source_version": "SFTW26_SYNTHETIC_BASELINE_001",
+      "observed_status": "LOCAL_SYNTHETIC_REPLAY_PASS",
+      "synthetic": true
+    },
+    {
+      "event_time": "2026-10-11T17:41:00Z",
+      "collection": "proposals",
+      "record_id": "SYN-PROPOSAL-V1",
+      "source_version": "SFTW26_SYNTHETIC_BASELINE_001",
+      "observed_status": "LOCAL_SYNTHETIC_REPLAY_PASS",
+      "synthetic": true
+    },
+    {
+      "event_time": "2026-10-11T17:42:51.506Z",
+      "collection": "recovery_receipts",
+      "record_id": "SYN-RECOVERY-002",
+      "source_version": "SFTW26_SYNTHETIC_BASELINE_001",
+      "observed_status": "PASSED_ATLAS_CONNECTOR_READBACK_CORRECTED_TIMESTAMP",
+      "synthetic": true
+    },
+    {
+      "event_time": "2026-10-11T18:21:14.037Z",
+      "collection": "eval_runs",
+      "record_id": "SYN-EVAL-PROVIDER-V2",
+      "source_version": "SFTW26_SYNTHETIC_BASELINE_001",
+      "observed_status": "EXECUTED_FROZEN_LOCAL_REPLAY",
+      "synthetic": true
+    },
+    {
+      "event_time": "2026-10-11T18:21:14.037Z",
+      "collection": "proposals",
+      "record_id": "SYN-PROPOSAL-PROVIDER-V2",
+      "source_version": "SFTW26_SYNTHETIC_BASELINE_001",
+      "observed_status": "EXECUTED_FROZEN_LOCAL_REPLAY",
+      "synthetic": true
+    },
+    {
+      "event_time": "2026-10-11T18:21:57.866Z",
+      "collection": "recovery_receipts",
+      "record_id": "SYN-RECOVERY-PROVIDER-V2",
+      "source_version": "SFTW26_SYNTHETIC_BASELINE_001",
+      "observed_status": "PASS_ATLAS_SOURCED_STATELESS_RECOVERY",
+      "synthetic": true
+    },
+    {
+      "event_time": "2026-10-11T18:22:33.956Z",
+      "collection": "harness_versions",
+      "record_id": "SYN-HARNESS-PROVIDER-V2",
+      "source_version": "SFTW26_SYNTHETIC_BASELINE_001",
+      "observed_status": "EXECUTED_FROZEN_LOCAL_REPLAY",
+      "synthetic": true
+    },
+    {
+      "event_time": "2026-10-11T18:22:33.956Z",
+      "collection": "policy_decisions",
+      "record_id": "SYN-DECISION-PROVIDER-V2",
+      "source_version": "SFTW26_SYNTHETIC_BASELINE_001",
+      "observed_status": "EXECUTED_FROZEN_LOCAL_REPLAY",
+      "synthetic": true
+    },
+    {
+      "event_time": "2026-10-11T18:55:10.263Z",
+      "collection": "policy_decisions",
+      "record_id": "SYN-DECISION-PROVIDER-V2-AUDIT-SUCCESSOR-001",
+      "source_version": "RDF-PROVIDER-AUDIT-SUCCESSOR-001",
+      "observed_status": "CORRECTIVE_AUDIT_EXECUTED",
+      "synthetic": true
+    },
+    {
+      "event_time": "2026-10-11T22:10:00Z",
+      "collection": "integration_events",
+      "record_id": "RDF-STREAM-SMOKE-20261011-001",
+      "source_version": "RDF_ATLAS_ONLY_SMOKE_V1",
+      "observed_status": "ATLAS_INJECTED_NO_PROVIDER_WEBHOOK",
+      "synthetic": true,
+      "source_type": "ATLAS_CONNECTOR_TEST_ONLY"
+    },
+    {
+      "event_time": "2026-10-11T23:27:59.339Z",
+      "collection": "integration_events",
+      "record_id": "RDF-SYN-ATLAS-PROBE-20261011232759",
+      "source_version": "manual_atlas_connector_probe_v1",
+      "observed_status": "SYNTHETIC_ATLAS_PROBE_INPUT",
+      "synthetic": true,
+      "source_type": "DIRECT_ATLAS_CONNECTOR_PROBE_NOT_PROVIDER_WEBHOOK"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+name: Verify synthetic RSI
+on:
+  push:
+    branches: [main, review-20261011]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install isolated dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-dev.txt
+      - name: Run frozen unit tests
+        run: python -m pytest -q
+      - name: Produce independent deterministic receipts
+        run: |
+          python scripts/run_local.py
+          python scripts/independent_verify.py
+      - name: Execute reproducible Jupyter notebook
+        run: |
+          python - <<'PY'
+          import nbformat
+          from pathlib import Path
+          from nbclient import NotebookClient
+          source=Path('notebooks/00_recursive_test.ipynb')
+          n=nbformat.read(source,as_version=4)
+          nbformat.validate(n)
+          result=NotebookClient(n, timeout=120, kernel_name='python3').execute(cwd=str(Path.cwd()))
+          out=Path('results/ci_recursive_test_executed.ipynb')
+          out.parent.mkdir(exist_ok=True)
+          nbformat.write(result,out)
+          print('EXECUTED_NOTEBOOK',out)
+          PY
+      - name: Preserve test evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-rsi-ci-receipts
+          path: |
+            results/local_synthetic_evaluation.json
+            results/ci_recursive_test_executed.ipynb
+          retention-days: 7

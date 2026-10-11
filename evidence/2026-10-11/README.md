@@ -6,7 +6,7 @@
 - Official event Atlas `rainy_day_fund_sftw26` readback: **6 newly authored metadata-only candidate FCO projection records**, **5 typed graph edges**, **1 receipt**.
 - Local user-provided CSV archive: 4,000 multilingual *synthetic* tickets, aggregate distribution only; no raw ticket descriptions or answer texts published.
 - Four private screen recordings re-encoded to 960px / 3 fps H.264 MP4 **without audio**. Media compression achieved **98.39% size reduction** (326,299,686 to 5,266,623 bytes); decode check PASS. These files are **not public**, because screenshots may contain personal information or credentials.
-- Local **exact-ID lookup** microbenchmark: 360 queries, 5 rounds; index and linear scan returned identical results. Measured median timings in `lookup_benchmark.json`.
+- Local **exact-ID lookup** microbenchmark: 360 queries, 5 rounds; index and linear scan returned identical results. Measured median timings in `lookup_benchmark_v2_corrected.json` (the original benchmark file was explicitly retracted and remains in Git history).
 
 ## Claims ceiling
 This benchmark measures **local in-memory keyed lookup only**, not FCO/FCG acceleration, ElevenLabs response speed, Raindrop grading speed, or end-to-end ticket resolution. The 12 frozen synthetic event fixtures were not modified.

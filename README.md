@@ -1,5 +1,24 @@
 # Make It Rain — rainy-day-fund
 
+## SF Tech Week submission — October 11, 2026
+
+**Solo project · Recursive Harnessing · honest integration status**
+
+- **[Submission details, sponsor-by-sponsor build trail, evidence table and 60-second video outline](SUBMISSION_2026-10-11.md)**
+- **[Full implemented backend, tests and accessible live-dashboard source (`review-20261011`)](https://github.com/biobitworks/rainy-day-fund/tree/review-20261011)**
+- **[Protected Vercel preview](https://rainy-day-fund-sftw26-cohw995ik-biobitworks.vercel.app/)** — reported route smoke; `UNCONFIGURED_FAIL_CLOSED`; not a public working integration
+- **YouTube 60-second demonstration:** PENDING video editing and a real public URL; no video permalink claimed.
+
+| Platform | Work completed | Honest boundary |
+|---|---|---|
+| **MongoDB Atlas** | Event sandbox database, synthetic tickets/evals, direct exact write-and-readback and receipts | End-to-end provider ingestion **NOT_TESTED** |
+| **ElevenLabs** | Voice/text design, recorded testing, signed webhook adapter and tool endpoints on review branch | Provider-signed call to Atlas **NOT_TESTED** |
+| **Raindrop.ai** | Local SDK/Workshop instrumentation, cloud-receipt guard in backend | Correlated cloud trace/Judge verdict **NOT_TESTED** |
+| **Kiro / recursive harness** | Agent-assisted implementation process, bounded synthetic evaluation and policies | Hosted autonomous improvement **NOT_DEMONSTRATED** |
+| **Vercel** | Public static evidence walkthrough and protected Python API/dashboard preview | Atlas credentials missing on preview; production remains static |
+
+The development handoff **reports** 14/14 targeted offline tests passing; full suite 102 passed, 2 failed, 1 skipped. Those are not new independent hosted-test claims. The three-platform flow (ElevenLabs → Atlas → Raindrop) **has not succeeded**. Credentials remain outside Git. See the [submission packet](SUBMISSION_2026-10-11.md) for each step, exact links and known failures.
+
 **SF Tech Week 2026 · Harness Engineering & Model Wrangling Hackathon · Recursive Harnessing**
 
 Make It Rain is an evidence-first, accessible event-support assistant prototype. It uses synthetic troubleshooting cases to evaluate **bounded changes to the agent's operating procedure**: propose a change, test against fixed cases, record a policy decision, and retain predecessor and failure history.

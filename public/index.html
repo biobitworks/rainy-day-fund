@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Make It Rain — live synthetic dashboard</title>
+<style>
+:root{--bg:#0f1720;--card:#18232f;--fg:#e6edf3;--mut:#8b9bab;--ok:#3fb950;--warn:#d29922;--bad:#f85149;--nt:#6e7681}
+*{box-sizing:border-box}body{margin:0;font:14px/1.45 system-ui,sans-serif;background:var(--bg);color:var(--fg);padding:16px;max-width:1200px;margin:auto}
+h1{font-size:20px;margin:0 0 4px}h2{font-size:14px;margin:0 0 8px;color:var(--mut);text-transform:uppercase;letter-spacing:.05em}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}.card{background:var(--card);border-radius:8px;padding:12px;overflow:auto}
+table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:4px 6px;border-bottom:1px solid #263545;font-size:12px;vertical-align:top}
+.b{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:600;background:var(--nt);color:#fff}
+.b.ok{background:var(--ok)}.b.warn{background:var(--warn);color:#000}.b.bad{background:var(--bad)}
+input,button{font:inherit;padding:6px 8px;border-radius:6px;border:1px solid #324356;background:#0b121a;color:var(--fg)}button{cursor:pointer;background:#1f6feb;border-color:#1f6feb}
+#log{max-height:180px;overflow:auto;font-size:12px;background:#0b121a;padding:6px;border-radius:6px;margin:6px 0}.mut{color:var(--mut)}code{font-size:11px}
+</style></head><body>
+<h1>Make It Rain — live synthetic dashboard</h1>
+<div class="mut">Authenticated polling every 2 s (no-store). This is <b>polling, not push streaming</b>. Synthetic data only. Stages without provider evidence read NOT_TESTED.</div>
+<div style="margin:10px 0"><input id="key" type="password" placeholder="viewer key" size="28" autocomplete="off"> <button id="save">Connect</button>
+ <span id="conn" class="b">DISCONNECTED</span> <span class="mut" id="lat"></span></div>
+<div class="grid">
+<div class="card"><h2>Pipeline stages</h2><table id="stages"></table></div>
+<div class="card"><h2>Update latency (DB → dashboard)</h2><div id="latency" class="mut">No ticket observed yet.</div>
+ <div class="mut" style="margin-top:6px">Measured as server time at the first poll that contained a ticket minus its stored <code>created_at</code>, using the server clock only. Resolution ≈ poll interval (2 s) plus request time.</div></div>
+<div class="card"><h2>Talk to the agent (voice or text)</h2>
+ <div><button id="startv">Start voice</button> <button id="startt">Start text only</button> <button id="stop">End</button> <span id="sess" class="b">NO SESSION</span></div>
+ <div id="log"></div><form id="tf"><input id="tin" size="38" placeholder="type a SYNTHETIC message" disabled> <button disabled id="tsend">Send</button></form>
+ <div class="mut">If microphone access fails the page falls back to a text-only session automatically.</div></div>
+</div>
+<div class="grid" style="margin-top:12px">
+<div class="card"><h2>Live synthetic tickets</h2><table id="tickets"><thead><tr><th>ticket</th><th>state</th><th>channel</th><th>conversation</th><th>created</th><th>readback</th></tr></thead><tbody></tbody></table></div>
+<div class="card"><h2>Workflow event timeline</h2><table id="events"><thead><tr><th>time</th><th>event</th><th>ticket</th></tr></thead><tbody></tbody></table></div>
+<div class="card"><h2>V0 / V1 evaluation (recorded)</h2><div id="eval" class="mut">NOT_TESTED</div></div>
+</div>
+<script type="module">
+const $=id=>document.getElementById(id), POLL=2000, seen=new Map();
+let key=sessionStorage.getItem('rdfk')||''; $('key').value=key;
+const badge=(t)=>{const s=document.createElement('span');s.className='b '+(/VERIFIED|OK/.test(t)&&!/NOT/.test(t)?'ok':/NOT_TESTED|BLOCKED|UNCONFIG/.test(t)?'':'warn');s.textContent=t;return s};
+const row=(tb,cells)=>{const tr=tb.insertRow();cells.forEach(c=>{const td=tr.insertCell();c instanceof Node?td.append(c):td.textContent=c??'—'})};
+async function poll(){
+ if(!key)return;
+ try{
+  const t0=performance.now();
+  const h={'x-rdf-viewer-key':key}, o={headers:h,cache:'no-store'};
+  const [tr,ev]=await Promise.all([fetch('/api/tickets',o),fetch('/api/events',o)]);
+  const ms=Math.round(performance.now()-t0);
+  if(tr.status===401){$('conn').replaceChildren(badge('UNAUTHORIZED'));return}
+  const T=await tr.json(), E=await ev.json();
+  $('conn').replaceChildren(badge(tr.ok&&ev.ok?'OK':'STORE '+(T.status||E.status)));$('lat').textContent='poll round-trip '+ms+' ms';
+  const tb=$('tickets').tBodies[0];tb.replaceChildren();
+  for(const t of T.tickets||[]){
+   if(!seen.has(t.ticket_id)){const lag=new Date(T.server_now)-new Date(t.created_at);seen.set(t.ticket_id,lag)}
+   row(tb,[t.ticket_id,badge(t.state),t.channel,t.conversation_id,t.created_at?.slice(11,23),t.readback_ok?('✓ '+t.write_readback_ms+' ms ('+t.readback_source+')'):'NOT_TESTED'])}
+  const lags=[...seen.values()];
+  if(lags.length)$('latency').textContent='tickets observed: '+lags.length+' · last first-seen lag: '+lags[lags.length-1]+' ms · max: '+Math.max(...lags)+' ms (±2000 ms poll resolution)';
+  const eb=$('events').tBodies[0];eb.replaceChildren();
+  for(const e of E.events||[])row(eb,[e.created_at?.slice(11,23),e.type,e.ticket_id]);
+  const st=$('stages');st.replaceChildren();
+  const S=E.stages||{};
+  for(const [k,v] of [['MongoDB write/readback',S.mongodb_write_readback],['ElevenLabs conversation ID',S.elevenlabs_conversation_id],['Signed post-call webhook',S.signed_webhook],['Raindrop trace',S.raindrop_trace],['Raindrop judge verdict',S.raindrop_judge_verdict]])row(st,[k,badge(v||'NOT_TESTED')]);
+  row(st,['Conversation IDs',(S.conversation_ids||[]).join(', ')||'NOT_TESTED']);row(st,['Raindrop trace IDs',(S.raindrop_trace_ids||[]).join(', ')||'NOT_TESTED']);row(st,['Store',S.store||'—']);
+  const ev2=E.evaluation;$('eval').textContent=ev2?`origin ${ev2.origin} · V0 ${ev2.V0.passed}/${ev2.V0.total} (unsafe ${ev2.V0.unsafe}) · V1 ${ev2.V1?.passed}/${ev2.V1?.total} (unsafe ${ev2.V1?.unsafe}) · decision ${JSON.stringify(ev2.decision)} · fixture ${ev2.fixture_sha256?.slice(0,12)}… — local synthetic record, not Atlas/provider evidence`:'NOT_TESTED';
+ }catch(e){$('conn').replaceChildren(badge('POLL ERROR'))}
+}
+$('save').onclick=()=>{key=$('key').value.trim();sessionStorage.setItem('rdfk',key);poll()};
+setInterval(poll,POLL);poll();
+// ---- agent session (voice with automatic text fallback) ----
+let conv=null;const log=m=>{const d=document.createElement('div');d.textContent=m;$('log').append(d);$('log').scrollTop=1e9};
+const sess=t=>$('sess').replaceChildren(badge(t));
+async function start(textOnly){
+ try{
+  const r=await fetch('/api/conversation/signed-url',{headers:{'x-rdf-viewer-key':key},cache:'no-store'});
+  if(!r.ok){log('signed URL unavailable: '+(await r.json()).status);sess('NOT_CONFIGURED');return}
+  const {signed_url}=await r.json();
+  const {Conversation}=await import('https://esm.sh/@elevenlabs/client@0.5.0');
+  if(!textOnly){try{(await navigator.mediaDevices.getUserMedia({audio:true})).getTracks().forEach(t=>t.stop())}catch(e){log('MICROPHONE FAILED ('+e.name+') → falling back to text');textOnly=true}}
+  conv=await Conversation.startSession({signedUrl:signed_url,textOnly,dynamicVariables:{rdf_synthetic:true},
+   onConnect:()=>{sess(textOnly?'TEXT SESSION':'VOICE SESSION');$('tin').disabled=$('tsend').disabled=false},
+   onMessage:m=>log((m.source||m.role||'?')+': '+(m.message||'')),onDisconnect:()=>{sess('ENDED');$('tin').disabled=$('tsend').disabled=true},
+   onError:e=>log('error: '+(e?.message||e))});
+  log('conversation_id: '+(conv.getId?conv.getId():'(unavailable)'));
+ }catch(e){log('start failed: '+e.name);sess('FAILED')}
+}
+$('startv').onclick=()=>start(false);$('startt').onclick=()=>start(true);$('stop').onclick=()=>conv?.endSession();
+$('tf').onsubmit=e=>{e.preventDefault();const v=$('tin').value.trim();if(v&&conv){conv.sendUserMessage(v);log('you: '+v);$('tin').value=''}};
+</script></body></html>

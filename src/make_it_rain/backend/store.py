@@ -11,6 +11,7 @@ DB_NAME = "rainy_day_fund_sftw26"
 TICKETS, EVENTS, WEBHOOKS, PARKED = ("integration_smoke_tickets", "integration_smoke_events",
                                     "integration_smoke_webhooks", "integration_smoke_parked")
 FIXTURES = "ticket_fixtures"  # frozen, read-only
+LIVE_TICKETS, LIVE_EVENTS, LIVE_WEBHOOKS, LIVE_IDEM = ("live_tickets", "live_events", "live_webhooks", "live_idempotency")
 
 
 class StoreError(Exception):
@@ -40,6 +41,10 @@ class MemoryStore:
 
     def update(self, coll: str, _id: str, fields: dict) -> None:
         self._c(coll)[_id].update(fields)
+
+    def list(self, coll: str, limit: int = 200, sort_key: str = "created_at") -> list[dict]:
+        rows = [json.loads(json.dumps(d)) for d in self._c(coll).values()]
+        return sorted(rows, key=lambda d: d.get(sort_key) or "", reverse=True)[:limit]
 
     def count(self, coll: str, flt: dict | None = None) -> int:
         return sum(all(d.get(k) == v for k, v in (flt or {}).items()) for d in self._c(coll).values())
@@ -88,6 +93,10 @@ class FaultyStore:
     def count(self, *a):
         return self.inner.count(*a)
 
+    def list(self, *a, **k):
+        if self.fail_reads: raise StoreError("injected read failure")
+        return self.inner.list(*a, **k)
+
 
 class MongoStore:
     """Atlas adapter. Fails closed: requires a credentialled URI, exact db name, never logs the URI."""
@@ -127,3 +136,13 @@ class MongoStore:
 
     def count(self, coll, flt=None):
         return self._wrap(lambda: self.db[coll].count_documents({"project_id": PROJECT_ID, **(flt or {})}))
+
+    def list(self, coll, limit=200, sort_key="created_at"):
+        return self._wrap(lambda: list(self.db[coll].find({"project_id": PROJECT_ID}).sort(sort_key, -1).limit(limit)))
+
+class UnconfiguredStore:
+    """Used when no credentialled Atlas URI exists: every operation fails closed (never reports success)."""
+    kind = "UNCONFIGURED_FAIL_CLOSED"
+    def _no(self, *a, **k):
+        raise StoreError("store unconfigured: credentialled MONGODB_URI missing")
+    get = insert_if_absent = update = count = list = _no

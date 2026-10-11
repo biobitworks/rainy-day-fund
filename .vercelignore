@@ -1,0 +1,11 @@
+.env
+.env.*
+private/
+notebooks/
+results/*
+!results/local_synthetic_evaluation.json
+tests/
+v2/
+benchmarks/
+*.ipynb
+.git

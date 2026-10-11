@@ -39,7 +39,7 @@ def test_tool_auth_required():
 
 def test_create_idempotent_one_ticket_and_frozen_untouched():
     s, c = mk(); before = json.dumps(s.data["ticket_fixtures"], sort_keys=True)
-    b = {"case_id": "RDF-SYN-005", "idempotency_key": "idem-0001", "conversation_id": "conv_1"}
+    b = {"case_id": "RDF-SYN-005", "idempotency_key": "idem-0001"}
     r1 = c.post("/api/tools/create_test_ticket", headers=H, json=b).json()
     r2 = c.post("/api/tools/create_test_ticket", headers=H, json=b).json()
     assert r1["status"] == r2["status"] == "SUCCEEDED" and r1["atlas_readback"] and r1["ticket_id"] == r2["ticket_id"]
@@ -124,7 +124,7 @@ def test_webhook_store_failure_is_not_200():
 
 def test_telemetry_sanitized_and_failure_isolated():
     tr = []; s, c = mk(traces=tr)
-    c.post("/api/tools/create_test_ticket", headers=H, json={"case_id": "RDF-SYN-005", "idempotency_key": "idem-0006", "conversation_id": "conv_1"})
+    c.post("/api/tools/create_test_ticket", headers={**H, "x-rdf-conversation-id": "conv_1"}, json={"case_id": "RDF-SYN-005", "idempotency_key": "idem-0006"})
     assert tr and tr[0]["tool"] == "create_test_ticket" and tr[0]["conversation_id"] == "conv_1" and KEY not in json.dumps(tr)
     cfg = Config(KEY, SECRET, AGENT, telemetry=lambda r: 1 / 0)
     c2 = TestClient(create_app(MemoryStore(FX), cfg))

@@ -18,6 +18,7 @@ from .store import (EVENTS, FIXTURES, PARKED, PROJECT_ID, TICKETS, WEBHOOKS, Sto
 CASE_RE = re.compile(r"^RDF-SYN-(0[01][0-9])$")
 ALLOWED_CASES = {f"RDF-SYN-{i:03d}" for i in range(1, 13)}
 SIG_TOLERANCE_S = 1800
+MAX_BODY = 65536
 GUIDE = {"RDF-SYN-TICKET-20261011-V1": "Generic synthetic guidance only: no event-specific credentials or schedules are available. Escalate to staff."}
 
 
@@ -50,7 +51,6 @@ class LookupReq(_Strict):
 class CreateReq(_Strict):
     case_id: str
     idempotency_key: str = Field(min_length=8, max_length=80)
-    conversation_id: str | None = Field(default=None, max_length=80)
 
 
 class StatusReq(_Strict):
@@ -96,6 +96,8 @@ def create_app(store, cfg: Config) -> FastAPI:
         return bool(cfg.tool_key) and hmac.compare_digest(k.encode(), cfg.tool_key.encode())
 
     async def parse(request: Request, model):
+        if len(await request.body()) > MAX_BODY:
+            return None
         try:
             return model.model_validate_json(await request.body())
         except Exception:
@@ -112,7 +114,7 @@ def create_app(store, cfg: Config) -> FastAPI:
     async def lookup_guide(request: Request):
         if not tool_auth(request): return deny()
         t0 = time.perf_counter(); req = await parse(request, LookupReq)
-        if req is None: return JSONResponse({"status": "REJECTED"}, status_code=422)
+        if req is None: return JSONResponse({"status": "FAILED", "source_version": None, "excerpt": None}, status_code=422)
         txt = GUIDE.get(req.guide_version_id)
         out = ({"status": "SUCCEEDED", "source_version": req.guide_version_id, "excerpt": txt} if txt
                else {"status": "NOT_FOUND", "source_version": None, "excerpt": None})
@@ -123,6 +125,7 @@ def create_app(store, cfg: Config) -> FastAPI:
     async def create_test_ticket(request: Request):
         if not tool_auth(request): return deny()
         t0 = time.perf_counter(); req = await parse(request, CreateReq)
+        conv = request.headers.get("x-rdf-conversation-id", "")[:80] or None  # optional extension header, outside contract body
         if req is None or req.case_id not in ALLOWED_CASES:
             return JSONResponse({"status": "REJECTED", "ticket_id": None, "state": "OPEN_TEST_ONLY", "atlas_readback": False}, status_code=422)
         tid = "SMOKE-" + sha(f"{PROJECT_ID}|{req.idempotency_key}".encode())[:16]
@@ -133,31 +136,31 @@ def create_app(store, cfg: Config) -> FastAPI:
             doc = {"_id": tid, "project_id": PROJECT_ID, "record_type": "INTEGRATION_SMOKE_TICKET",
                    "ticket_id": tid, "case_id": req.case_id, "fixture_source_version": fx["source_version"],
                    "state": "OPEN_TEST_ONLY", "idempotency_key": req.idempotency_key,
-                   "conversation_id": req.conversation_id, "created_at": now(), "synthetic": True,
+                   "conversation_id": conv, "created_at": now(), "synthetic": True,
                    "contains_personal_data": False, "predecessor_id": req.case_id}
             inserted = store.insert_if_absent(TICKETS, doc)
             rb = store.get(TICKETS, tid)  # authoritative readback
             if rb is None:
                 raise StoreError("readback empty")
             if rb["case_id"] != req.case_id:  # same key reused for different case
-                out = {"status": "REJECTED", "ticket_id": None, "state": "OPEN_TEST_ONLY", "atlas_readback": False, "reason": "IDEMPOTENCY_CONFLICT"}
-                trace("create_test_ticket", {"case_id": req.case_id}, out, t0, req.case_id, req.conversation_id)
+                out = {"status": "REJECTED", "ticket_id": None, "state": "OPEN_TEST_ONLY", "atlas_readback": False}
+                trace("create_test_ticket", {"case_id": req.case_id}, out, t0, req.case_id, conv)
                 return JSONResponse(out, status_code=409)
             store.insert_if_absent(EVENTS, {"_id": f"EVT-{tid}-created", "project_id": PROJECT_ID, "ticket_id": tid,
                                             "sequence": 1, "type": "TICKET_CREATED", "event_time": now(), "synthetic": True})
         except StoreError as e:
             out = {"status": "FAILED", "ticket_id": None, "state": "OPEN_TEST_ONLY", "atlas_readback": False}
-            trace("create_test_ticket", {"case_id": req.case_id}, {**out, "error": str(e)[:40]}, t0, req.case_id, req.conversation_id)
+            trace("create_test_ticket", {"case_id": req.case_id}, {**out, "error": str(e)[:40]}, t0, req.case_id, conv)
             return JSONResponse(out, status_code=503)
         out = {"status": "SUCCEEDED", "ticket_id": tid, "state": rb["state"], "atlas_readback": True}
-        trace("create_test_ticket", {"case_id": req.case_id, "created_new": inserted}, out, t0, req.case_id, req.conversation_id)
+        trace("create_test_ticket", {"case_id": req.case_id, "created_new": inserted}, out, t0, req.case_id, conv)
         return out
 
     @app.post("/api/tools/get_ticket_status")
     async def get_ticket_status(request: Request):
         if not tool_auth(request): return deny()
         t0 = time.perf_counter(); req = await parse(request, StatusReq)
-        if req is None: return JSONResponse({"status": "REJECTED"}, status_code=422)
+        if req is None: return JSONResponse({"status": "FAILED", "ticket_id": None, "state": None, "atlas_readback": False}, status_code=422)
         try:
             d = store.get(TICKETS, req.ticket_id)  # live store query, never echoes input
         except StoreError:
@@ -191,6 +194,8 @@ def create_app(store, cfg: Config) -> FastAPI:
     @app.post("/api/webhooks/elevenlabs")
     async def elevenlabs_webhook(request: Request):
         raw = await request.body()
+        if len(raw) > MAX_BODY:
+            return JSONResponse({"status": "TOO_LARGE"}, status_code=413)
         if not verify_signature(cfg.webhook_secret, request.headers.get("elevenlabs-signature"), raw, cfg.clock()):
             return deny(401, "INVALID_SIGNATURE")
         try:
@@ -211,8 +216,13 @@ def create_app(store, cfg: Config) -> FastAPI:
                 return {"status": "PARKED"}
             wid = f"WH-{sha((typ + '|' + conv).encode())[:20]}"  # unique event key => duplicate delivery is idempotent
             inserted = store.insert_if_absent(WEBHOOKS, {"_id": wid, **meta, "synthetic": True, "transcript_stored": False})
-            if store.get(WEBHOOKS, wid) is None:
+            rb = store.get(WEBHOOKS, wid)
+            if rb is None:
                 raise StoreError("readback empty")
+            if rb["event_digest"] != digest:  # same conversation+type, different signed body
+                store.insert_if_absent(PARKED, {"_id": f"PARK-{digest[:24]}", "project_id": PROJECT_ID, "event_type": typ,
+                    "event_digest": digest, "received_at": now(), "reason": "DIGEST_MISMATCH_FOR_EXISTING_EVENT_KEY", "synthetic": False})
+                return JSONResponse({"status": "CONFLICT_PARKED"}, status_code=409)
         except StoreError:
             return JSONResponse({"status": "FAILED"}, status_code=503)  # non-200 so ElevenLabs retries
         return {"status": "STORED" if inserted else "DUPLICATE_IGNORED", "webhook_record_id": wid}

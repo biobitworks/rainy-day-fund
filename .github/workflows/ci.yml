@@ -42,6 +42,20 @@ jobs:
           nbformat.write(result,out)
           print('EXECUTED_NOTEBOOK',out)
           PY
+      - name: Run guarded Atlas notebook (no provider credentials)
+        run: |
+          python - <<'PY'
+          import nbformat
+          from nbclient import NotebookClient
+          from pathlib import Path
+          path=Path('notebooks/01_atlas_recovery.ipynb')
+          n=nbformat.read(path,as_version=4)
+          nbformat.validate(n)
+          result=NotebookClient(n,timeout=120,kernel_name='python3').execute(cwd=str(Path.cwd()))
+          target=Path('results/ci_atlas_recovery_protocol.ipynb')
+          nbformat.write(result,target)
+          print('ATLAS_HOSTED_TEST=NOT_TESTED; notebook protocol executed')
+          PY
       - name: Preserve test evidence
         uses: actions/upload-artifact@v4
         with:

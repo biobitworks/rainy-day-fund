@@ -16,3 +16,15 @@ Start with [Sophia's handoff](docs/TEAM_HANDOFF_SOPHIA.md), [implementation gate
 Apache-2.0 license is already present in this public GitHub repository. Both contributors should review future code and asset ownership before final submission. Original research projects remain separately licensed; no upstream implementation is imported by these documents.
 
 The authoritative guide requires a public repository and one-minute video by **5:00 PM PDT on 2026-10-11**. The full app, live RSI cycle, voice integration and submission are NOT_COMPLETE.
+
+## Runbook: guarded hosted Atlas recovery
+
+The local `.env` file is ignored and must retain owner-only mode `0600`. The Atlas script accepts `MONGODB_URI` (or the legacy `ATLAS_MONGODB_URI`) and performs no write without the explicit `write` argument.
+
+```sh
+python3 -m pip install -r requirements-atlas.txt
+python3 scripts/atlas_smoke.py write RDF-DEMO-ONE
+python3 scripts/atlas_smoke.py read RDF-DEMO-ONE
+```
+
+The optional `notebooks/01_atlas_recovery.ipynb` executes the corresponding two-process protocol only when `RDF_RUN_ATLAS_RECOVERY=1`. GitHub CI exercises its **NOT_TESTED** branch without credentials; a green workflow is not evidence of hosted recovery.

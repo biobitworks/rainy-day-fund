@@ -12,3 +12,6 @@ results/live_*/
 *.pem
 *.key
 *.sqlite
+
+# Finder metadata
+.DS_Store

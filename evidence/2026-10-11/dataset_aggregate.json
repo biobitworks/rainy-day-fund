@@ -1,0 +1,23 @@
+{
+  "project_id": "RDF-SFTW26-NEW-001",
+  "source_version": "RDF-LOCAL-FCO-FCG-CANDIDATE-V1",
+  "rows": 4000,
+  "columns": 17,
+  "languages": {
+    "de": 848,
+    "en": 1391,
+    "es": 812,
+    "fr": 476,
+    "pt": 473
+  },
+  "priorities": {
+    "high": 1649,
+    "medium": 1603,
+    "low": 748
+  },
+  "empty_subject_count": 468,
+  "missing_body_count": 1,
+  "raw_records_published": false,
+  "source_license": "UNVERIFIED",
+  "source_content": "USER_SUPPLIED_SYNTHETIC_CSV"
+}

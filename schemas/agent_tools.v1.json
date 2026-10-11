@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Make It Rain ElevenLabs tool contract v1",
+  "schema_version": "rdf.agent_tools.v1",
+  "status": "PROPOSED_NOT_DEPLOYED",
+  "security_note": "Only backend may talk to MongoDB. Service secret/identity checked outside LLM supplied arguments. No real participant PII.",
+  "tools": {
+    "get_public_event_fact": {
+      "method": "POST",
+      "path": "/api/tools/get-public-event-fact",
+      "required": [
+        "source_version",
+        "fact_key"
+      ],
+      "properties": {
+        "source_version": {
+          "type": "string"
+        },
+        "fact_key": {
+          "type": "string",
+          "enum": [
+            "doors_open",
+            "submission_deadline",
+            "team_size",
+            "check_in_location",
+            "staff_help_path"
+          ]
+        },
+        "language": {
+          "type": "string"
+        }
+      },
+      "response_required": [
+        "status",
+        "fact_key",
+        "source_version",
+        "value"
+      ]
+    },
+    "open_synthetic_ticket": {
+      "method": "POST",
+      "path": "/api/tools/open-synthetic-ticket",
+      "required": [
+        "session_id",
+        "idempotency_key",
+        "category",
+        "source_version"
+      ],
+      "properties": {
+        "session_id": {
+          "type": "string"
+        },
+        "idempotency_key": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "onboarding",
+            "team_setup",
+            "environment_setup",
+            "accessible_seating",
+            "rule_change",
+            "general_support"
+          ]
+        },
+        "source_version": {
+          "type": "string"
+        },
+        "synthetic": {
+          "const": true
+        }
+      },
+      "response_required": [
+        "status",
+        "ticket_id",
+        "session_id",
+        "source_version"
+      ]
+    },
+    "get_authorized_ticket": {
+      "method": "POST",
+      "path": "/api/tools/get-authorized-ticket",
+      "required": [
+        "session_id",
+        "ticket_id"
+      ],
+      "properties": {
+        "session_id": {
+          "type": "string"
+        },
+        "ticket_id": {
+          "type": "string"
+        }
+      },
+      "response_required": [
+        "status",
+        "ticket_id",
+        "ticket_state",
+        "latest_sequence"
+      ]
+    },
+    "escalate_synthetic_ticket": {
+      "method": "POST",
+      "path": "/api/tools/escalate-synthetic-ticket",
+      "required": [
+        "session_id",
+        "ticket_id",
+        "idempotency_key",
+        "reason"
+      ],
+      "properties": {
+        "session_id": {
+          "type": "string"
+        },
+        "ticket_id": {
+          "type": "string"
+        },
+        "idempotency_key": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string",
+          "enum": [
+            "accessibility",
+            "unresolved_setup",
+            "policy_conflict",
+            "staff_required"
+          ]
+        }
+      },
+      "response_required": [
+        "status",
+        "ticket_id",
+        "escalation_state"
+      ]
+    }
+  }
+}

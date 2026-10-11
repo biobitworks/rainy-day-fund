@@ -1,0 +1,180 @@
+{
+  "project_id": "RDF-SFTW26-NEW-001",
+  "run_id": "RDF-V2-20261011T203543Z",
+  "observed_at": "2026-10-11T20:35:43.177780+00:00",
+  "environment": {
+    "host": "magicPRObox.local",
+    "python": "3.13.9",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "ollarma_health": {
+      "status": "degraded",
+      "helper_chat": {
+        "requested_model": null,
+        "effective_model": "qwen2.5:1.5b",
+        "status": "fallback_ready",
+        "reason_code": "SELECTION_STALE",
+        "detail": "Selection artifact is older than 24h: 2026-10-01T16:08:33Z. Using pressure-aware local fallback 'qwen2.5:1.5b'; strict validated selection still needs refresh.",
+        "recovery_commands": [
+          "ollarma run --suites code --trials 3",
+          "ollarma report --run-id <fresh_run_id>",
+          "ollarma verify <fresh_run_id>"
+        ]
+      },
+      "chat_selection": {
+        "workload_class": "chat",
+        "status": "fallback_ready",
+        "model": "qwen2.5:1.5b",
+        "reason_code": "SELECTION_STALE",
+        "detail": "Selection artifact is older than 24h: 2026-10-01T16:08:33Z. Using pressure-aware local fallback 'qwen2.5:1.5b'; strict validated selection still needs refresh.",
+        "recovery_commands": [
+          "ollarma run --suites code --trials 3",
+          "ollarma report --run-id <fresh_run_id>",
+          "ollarma verify <fresh_run_id>"
+        ]
+      },
+      "route_selection": {
+        "workload_class": "route_prompt",
+        "status": "fallback_ready",
+        "model": "qwen2.5:1.5b",
+        "reason_code": "SELECTION_STALE",
+        "detail": "Selection artifact is older than 24h: 2026-10-01T16:08:33Z. Using pressure-aware local fallback 'qwen2.5:1.5b'; strict validated selection still needs refresh.",
+        "recovery_commands": [
+          "ollarma run --suites code --trials 3",
+          "ollarma report --run-id <fresh_run_id>",
+          "ollarma verify <fresh_run_id>"
+        ]
+      },
+      "project_count": 35,
+      "startup_readiness": {
+        "schema_version": 1,
+        "service_label": "com.byron.ollarma",
+        "generated_at": "2026-10-11T20:21:16.760320+00:00",
+        "status": "degraded",
+        "checks": [
+          {
+            "name": "model_availability",
+            "status": "degraded",
+            "detail": "Selection artifact is older than 24h: 2026-10-01T16:08:33Z. Using pressure-aware local fallback 'qwen2.5:1.5b'; strict validated selection still needs refresh.",
+            "reason_code": "SELECTION_STALE"
+          },
+          {
+            "name": "swap_posture",
+            "status": "degraded",
+            "detail": "swap_used_mb=16950 exceeds threshold 8192MB",
+            "reason_code": "SWAP_DEGRADED"
+          },
+          {
+            "name": "admission_posture",
+            "status": "ready",
+            "detail": "fail-closed recovery admission is ON",
+            "reason_code": null
+          },
+          {
+            "name": "pipeline_posture",
+            "status": "ready",
+            "detail": "loaded_model_count=2 source=api/ps+ollama ps+sysctl vm.swapusage",
+            "reason_code": null
+          }
+        ],
+        "model_availability": {
+          "status": "degraded",
+          "effective_model": "qwen2.5:1.5b",
+          "reason_code": "SELECTION_STALE",
+          "detail": "Selection artifact is older than 24h: 2026-10-01T16:08:33Z. Using pressure-aware local fallback 'qwen2.5:1.5b'; strict validated selection still needs refresh."
+        },
+        "swap": {
+          "status": "degraded",
+          "swap_used_mb": 16949.94,
+          "threshold_mb": 8192.0,
+          "reason_code": "SWAP_DEGRADED"
+        },
+        "admission": {
+          "enabled": true,
+          "detail": "fail-closed recovery admission is ON"
+        },
+        "pipeline": {
+          "loaded_model_count": 2,
+          "loaded_models": [
+            "qwen2.5:1.5b",
+            "nomic-embed-text:latest"
+          ],
+          "telemetry_source": "api/ps+ollama ps+sysctl vm.swapusage"
+        },
+        "residency": {
+          "state": "ready",
+          "rescue_target": "qwen2.5:1.5b",
+          "rescue_resident": true,
+          "opportunistic_target": "phi4-mini",
+          "opportunistic_resident": false,
+          "swap_used_mb": 16949.94,
+          "reason_code": null,
+          "next_action": "hold"
+        },
+        "gateway": {
+          "enabled": true,
+          "allowlist_size": 6,
+          "virtual_keys_configured": 0,
+          "rate_cap_state": "within_caps",
+          "admissions_today": 0,
+          "receipts_today": 0
+        },
+        "next_fix_commands": [
+          "ollarma run --suites code --trials 3",
+          "ollarma report --run-id <fresh_run_id>",
+          "vm_stat | head  # inspect macOS memory pressure",
+          "sudo purge      # release file cache if needed",
+          "launchctl print gui/$(id -u)/com.byron.ollarma",
+          "curl -sS http://127.0.0.1:8484/startup/readiness | jq"
+        ]
+      },
+      "last_routing_ladder": null
+    },
+    "models": {
+      "qwen2.5:7b": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+      "nomic-embed-text:latest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f"
+    }
+  },
+  "transform_version": "rdf-v2-etl-0.1",
+  "checks": {
+    "frozen_baseline_unchanged": "PASS",
+    "ticket_schema_keys": "PASS",
+    "cards_validated_count": 11,
+    "cards_quarantined": 1,
+    "no_fabricated_resolutions": "PASS",
+    "classification_model_agreement": "4/12 (model suggestion only; labels are hand-authored)",
+    "retrieval_top1_hits": 0,
+    "retrieval_eligible": 2,
+    "ticket_splits": {
+      "development": 4,
+      "heldout": 6,
+      "adversarial": 2
+    },
+    "atlas_write_readback": "NOT_TESTED",
+    "elevenlabs_tests": "NOT_TESTED",
+    "raindrop_judges": "NOT_TESTED",
+    "seedgraph_jobs": "NOT_EXECUTED (local DAG in this script; Seedgraph dispatcher not invoked)",
+    "ollarma_dispatch": "NOT_VIA_OLLARMA (direct Ollama loopback; Ollarma /health observed separately)",
+    "images_videos": "NOT_FOUND_NOTHING_INGESTED"
+  },
+  "inference_calls": 15,
+  "total_tokens": 3889,
+  "inference_failures": 0,
+  "artifacts": {
+    "atlas_import_v2.jsonl": "eed1e3f0b2da773f4a74f6775fc91b81d40ae455f9c7bf9a92a10f2f8cce1317",
+    "atlas_readback_v2.json": "257e8141743598ec7c27a78cba9d9625d79b1e2eca6a8da61c725fbe80cd9166",
+    "benchmark_v0_vs_v2.json": "57a686ba55c133ef1e4289895df11f8a4b93be5a331153fe4432d217c322bd53",
+    "elevenlabs_agent_prompt_v2.md": "543996d6a53a67c6248cb66e5138ccf75132b5091a4c5fae8670dbe8cff87078",
+    "elevenlabs_knowledge_v2.md": "7213578ab6fcdb2f68e9c68c6ccc588e8d2539c38bfe0f778339af4e6d23aff3",
+    "elevenlabs_tool_contracts_v2.json": "7f720d4c6ab0209b41cc9b515334529eea9d2248bffbc19ad5966b4fb5fd374d",
+    "execution_receipt.json": "d6a95ecdbfd616b7583da2749268312bd2914df33c6ddf801f016c32f4898226",
+    "inference_log_v2.jsonl": "1dc5869e157296612405581ffe334852913fa23f878eb7ada57478210aaa40c7",
+    "knowledge_cards_v2.jsonl": "ea43b7933d18451eab311fcd531a5c4ecd2e5bc7ceb33d7a7f7a31db2f96e419",
+    "quarantine_v2.jsonl": "285091de5c15191dd8a88c55c3d6089766cd2ad46c40444a183cc87e6ecd1dfc",
+    "raindrop_eval_upload_v2.csv": "aa59a9d01638bd161842d700d595a4d195d4f3db28870a9f835fe007cbc3d3e6",
+    "raindrop_judges_v2.json": "13c856855e396388c7dc7c7ad2fcdf0742bffe18496da345138182f9861239c3",
+    "source_manifest.json": "962e8c6ea15d072c6babb70d99d15b92e39fa2e3a2dee1d5a3fa67a2f2723dd8",
+    "transformed_ticket_samples_v2.jsonl": "8556cbcbc033637d21caf28997d877241681dadecba8f917d6168be37f4dfead"
+  },
+  "signed": "NOT_SIGNED",
+  "mmr_root": "NOT_COMPUTED"
+}

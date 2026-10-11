@@ -1,0 +1,21 @@
+{
+  "project_id": "RDF-SFTW26-NEW-001",
+  "record_type": "INTEGRATION_RECEIPT_TEMPLATE_ONLY",
+  "synthetic": true,
+  "case_id": "RDF-SYN-005",
+  "conversation_id": null,
+  "agent_id": null,
+  "tool_call_id": null,
+  "atlas_ticket_id": null,
+  "atlas_readback": null,
+  "postcall_event_id": null,
+  "webhook_signature_valid": null,
+  "raindrop_trace_id": null,
+  "raindrop_eval_run_id": null,
+  "measured_latency_ms": null,
+  "status": "NOT_TESTED",
+  "predecessor_id": null,
+  "new_root": "NOT_COMPUTED",
+  "mmr": "NOT_COMMITTED",
+  "signing": "NOT_SIGNED"
+}

@@ -1,0 +1,148 @@
+{
+  "project_id": "RDF-SFTW26-NEW-001",
+  "generated_at": "2026-10-11T20:35:43.178828+00:00",
+  "sources": [
+    {
+      "source_id": "SRC-3ea8aa86",
+      "filename": "benchmarks/frozen_cases.json",
+      "source_type": "frozen_fixture",
+      "sha256": "54e4aef65fc204771cda4594142c263302ecc8af414334ac09ade83ec6bf56cb",
+      "bytes": 1364,
+      "source_version": "git:c91904d+worktree",
+      "access_status": "BYTES_READ",
+      "licensing_status": "TEAM_AUTHORED_REPO_FILE",
+      "permitted_use": "baseline_only_read",
+      "privacy_gate": "PASS_NO_PATTERN",
+      "processing_status": "BASELINE_READ_ONLY"
+    },
+    {
+      "source_id": "SRC-e39b9853",
+      "filename": "schemas/agent_tools.v1.json",
+      "source_type": "tool_contract",
+      "sha256": "9b32dd7783e6edfdaaa9c8464ddfdaf9919f1f06e0b51add11e707ee575a688c",
+      "bytes": 3204,
+      "source_version": "git:c91904d+worktree",
+      "access_status": "BYTES_READ",
+      "licensing_status": "TEAM_AUTHORED_REPO_FILE",
+      "permitted_use": "contract_reference",
+      "privacy_gate": "PASS_NO_PATTERN",
+      "processing_status": "READ_NOT_EXTRACTED"
+    },
+    {
+      "source_id": "SRC-a70ff379",
+      "filename": "docs/ELEVENLABS_KIRO_CONTRACT.md",
+      "source_type": "team_doc",
+      "sha256": "c8d9a138ad61f703331868edc52909cf7aec3b6c59ed48ef881dbcb853e9771b",
+      "bytes": 4131,
+      "source_version": "git:c91904d+worktree",
+      "access_status": "BYTES_READ",
+      "licensing_status": "TEAM_AUTHORED_REPO_FILE",
+      "permitted_use": "knowledge_extraction",
+      "privacy_gate": "PASS_NO_PATTERN",
+      "processing_status": "PROCESSED cards_ok=5 quarantined=1"
+    },
+    {
+      "source_id": "SRC-e4ae4e8e",
+      "filename": "docs/ATLAS_ELEVENLABS_SETUP.md",
+      "source_type": "team_doc",
+      "sha256": "ed0ddce8c8aca9d9d6011e74055c2811184797222f614a026799f3a761a3377f",
+      "bytes": 4546,
+      "source_version": "git:c91904d+worktree",
+      "access_status": "BYTES_READ",
+      "licensing_status": "TEAM_AUTHORED_REPO_FILE",
+      "permitted_use": "knowledge_extraction",
+      "privacy_gate": "PASS_NO_PATTERN",
+      "processing_status": "PROCESSED cards_ok=6 quarantined=0"
+    },
+    {
+      "source_id": "SRC-882c799a",
+      "filename": "docs/ATLAS_DATA_CONTRACT.md",
+      "source_type": "team_doc",
+      "sha256": "34b912b364339ce375f55a77d1b9143bf382e267706034d4e2254c6785e0c13a",
+      "bytes": 6356,
+      "source_version": "git:c91904d+worktree",
+      "access_status": "BYTES_READ",
+      "licensing_status": "TEAM_AUTHORED_REPO_FILE",
+      "permitted_use": "knowledge_extraction",
+      "privacy_gate": "PASS_NO_PATTERN",
+      "processing_status": "READ_NOT_EXTRACTED"
+    },
+    {
+      "source_id": "SRC-81209878",
+      "filename": "raindrop_eval_dataset.csv",
+      "source_type": "named_handoff",
+      "sha256": null,
+      "access_status": "NOT_FOUND_ON_THIS_HOST",
+      "licensing_status": "UNKNOWN",
+      "permitted_use": "none",
+      "processing_status": "NOT_PROCESSED",
+      "note": "searched repo, ~/projects/active, ~/Downloads, ~/Desktop (maxdepth 4)"
+    },
+    {
+      "source_id": "SRC-74ac600e",
+      "filename": "atlas_ticket_fixtures.jsonl",
+      "source_type": "named_handoff",
+      "sha256": null,
+      "access_status": "NOT_FOUND_ON_THIS_HOST",
+      "licensing_status": "UNKNOWN",
+      "permitted_use": "none",
+      "processing_status": "NOT_PROCESSED",
+      "note": "searched repo, ~/projects/active, ~/Downloads, ~/Desktop (maxdepth 4)"
+    },
+    {
+      "source_id": "SRC-be169e46",
+      "filename": "elevenlabs_knowledge_base.md",
+      "source_type": "named_handoff",
+      "sha256": null,
+      "access_status": "NOT_FOUND_ON_THIS_HOST",
+      "licensing_status": "UNKNOWN",
+      "permitted_use": "none",
+      "processing_status": "NOT_PROCESSED",
+      "note": "searched repo, ~/projects/active, ~/Downloads, ~/Desktop (maxdepth 4)"
+    },
+    {
+      "source_id": "SRC-fe34c42c",
+      "filename": "claude_seedgraph_magicbro_task.md",
+      "source_type": "named_handoff",
+      "sha256": null,
+      "access_status": "NOT_FOUND_ON_THIS_HOST",
+      "licensing_status": "UNKNOWN",
+      "permitted_use": "none",
+      "processing_status": "NOT_PROCESSED",
+      "note": "searched repo, ~/projects/active, ~/Downloads, ~/Desktop (maxdepth 4)"
+    },
+    {
+      "source_id": "SRC-3d8c2e73",
+      "filename": "~/Downloads/Copy of rainy day fund.md",
+      "source_type": "excluded_or_absent",
+      "sha256": null,
+      "access_status": "NOT_READ",
+      "licensing_status": "UNRESOLVED",
+      "permitted_use": "none",
+      "processing_status": "EXCLUDED",
+      "note": "unreviewed personal/chat export; rights+privacy unresolved"
+    },
+    {
+      "source_id": "SRC-0718c59d",
+      "filename": "~/Downloads/RDF_RAINDROP_WORKSHOP_HANDOFF.md",
+      "source_type": "excluded_or_absent",
+      "sha256": null,
+      "access_status": "NOT_READ",
+      "licensing_status": "UNRESOLVED",
+      "permitted_use": "none",
+      "processing_status": "EXCLUDED",
+      "note": "outside repo; not authorized for this run"
+    },
+    {
+      "source_id": "SRC-dba4753b",
+      "filename": "pictures/screenshots/videos",
+      "source_type": "excluded_or_absent",
+      "sha256": null,
+      "access_status": "NOT_READ",
+      "licensing_status": "UNRESOLVED",
+      "permitted_use": "none",
+      "processing_status": "EXCLUDED",
+      "note": "none located for this project; nothing to ingest"
+    }
+  ]
+}

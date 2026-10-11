@@ -1,0 +1,14 @@
+{
+  "status": "PREPARED_NOT_CONFIGURED_NOT_RUN",
+  "raindrop_auth": "MCP server requires authentication; not authorized",
+  "judges": [
+    "resolution_correctness",
+    "source_grounded_answers",
+    "troubleshooting_efficiency",
+    "correct_escalation",
+    "accessibility_completion",
+    "privacy_authorization_violations",
+    "trace_completeness(input,output,tool_calls,tool_results)"
+  ],
+  "scores": null
+}

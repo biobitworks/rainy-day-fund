@@ -1,0 +1,68 @@
+{
+  "contract_version": "rdf-integration-test-tools-v1",
+  "warning": "DEVELOPER CONTRACT ONLY, not ElevenLabs tool-import payload",
+  "auth": {
+    "type": "server-side shared secret header",
+    "header": "X-RDF-Tool-Key",
+    "never_in_knowledge_base": true
+  },
+  "base_url": "https://YOUR-APP-DOMAIN.example",
+  "tools": [
+    {
+      "name": "lookup_guide",
+      "method": "POST",
+      "path": "/api/tools/lookup_guide",
+      "request": {
+        "query": "string",
+        "guide_version_id": "string"
+      },
+      "response": {
+        "status": "SUCCEEDED|NOT_FOUND|FAILED",
+        "source_version": "string|null",
+        "excerpt": "string|null"
+      }
+    },
+    {
+      "name": "create_test_ticket",
+      "method": "POST",
+      "path": "/api/tools/create_test_ticket",
+      "request": {
+        "case_id": "RDF-SYN-001..012",
+        "idempotency_key": "string"
+      },
+      "response": {
+        "status": "SUCCEEDED|REJECTED|FAILED",
+        "ticket_id": "string|null",
+        "state": "OPEN_TEST_ONLY",
+        "atlas_readback": "boolean"
+      }
+    },
+    {
+      "name": "get_ticket_status",
+      "method": "POST",
+      "path": "/api/tools/get_ticket_status",
+      "request": {
+        "ticket_id": "string"
+      },
+      "response": {
+        "status": "SUCCEEDED|NOT_FOUND|FAILED",
+        "ticket_id": "string|null",
+        "state": "string|null",
+        "atlas_readback": "boolean"
+      }
+    },
+    {
+      "name": "request_staff_escalation",
+      "method": "POST",
+      "path": "/api/tools/request_staff_escalation",
+      "request": {
+        "ticket_id": "string",
+        "reason_code": "string"
+      },
+      "response": {
+        "status": "PENDING|REJECTED|FAILED",
+        "staff_confirmed": "boolean"
+      }
+    }
+  ]
+}

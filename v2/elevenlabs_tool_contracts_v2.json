@@ -1,0 +1,44 @@
+{
+  "schema_version": "rdf.agent_tools.v2",
+  "status": "PROPOSED_NOT_DEPLOYED",
+  "extends": {
+    "file": "schemas/agent_tools.v1.json",
+    "sha256": "9b32dd7783e6edfdaaa9c8464ddfdaf9919f1f06e0b51add11e707ee575a688c"
+  },
+  "v1_tools_reused": [
+    "escalate_synthetic_ticket",
+    "get_authorized_ticket",
+    "get_public_event_fact",
+    "open_synthetic_ticket"
+  ],
+  "tools_v2": {
+    "create_ticket": {
+      "maps_to_v1": "open_synthetic_ticket",
+      "required": [
+        "session_id",
+        "idempotency_key",
+        "category",
+        "source_version",
+        "issue_summary"
+      ]
+    },
+    "get_ticket_status": {
+      "maps_to_v1": "get_authorized_ticket",
+      "required": [
+        "session_id",
+        "ticket_id"
+      ],
+      "auth": "backend verifies ticket belongs to session; caller phone number is never an identity proof"
+    },
+    "escalate_ticket": {
+      "maps_to_v1": "escalate_synthetic_ticket",
+      "required": [
+        "session_id",
+        "ticket_id",
+        "reason",
+        "escalation_tier"
+      ]
+    }
+  },
+  "deployment_receipts": "NONE"
+}

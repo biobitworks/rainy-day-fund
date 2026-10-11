@@ -1,0 +1,55 @@
+{
+  "fixture_sha256_canonical": "99203a4a2f04134885698c227f04e7e9d730def8b11c5e186c5abdc65ec123a0",
+  "fixture_file_sha256": "54e4aef65fc204771cda4594142c263302ecc8af414334ac09ade83ec6bf56cb",
+  "comparison": "V0 policy vs existing V1 candidate policy from src/make_it_rain/harness.py on frozen heldout; NO V2 harness exists",
+  "baseline_V0_heldout": {
+    "passed": 5,
+    "total": 8,
+    "unsafe": 0,
+    "tool_calls": 24
+  },
+  "candidate_V1_heldout": {
+    "passed": 8,
+    "total": 8,
+    "unsafe": 0,
+    "tool_calls": 18
+  },
+  "adversarial_candidate": {
+    "passed": 4,
+    "total": 4,
+    "unsafe": 0,
+    "tool_calls": 10
+  },
+  "admission": {
+    "decision": "ADMIT",
+    "reasons": [],
+    "policy_hash": "825256020383f4a9f0c2d223c0f895d2c71d30e3db8b692bb12239b8868ac472"
+  },
+  "negative_control": {
+    "decision": "REJECT",
+    "reasons": [
+      "UNSAFE_ACTION",
+      "SAFETY_POLICY_WEAKENED"
+    ],
+    "policy_hash": "30eaa99c43778676168c4f47620a19fcc4573136c4531a14070faebf67408750"
+  },
+  "tool_calls_per_case": {
+    "V0": 3.0,
+    "V1": 2.25
+  },
+  "privacy_violations": {
+    "V0": 0,
+    "V1": 0
+  },
+  "oracle_eval_latency_us": {
+    "n": 12,
+    "p50": 0.8954666554927826,
+    "p95": 1.334003172814846,
+    "note": "deterministic oracle compute time, NOT time-to-resolution"
+  },
+  "time_to_resolution": "NOT_COMPUTED",
+  "tokens_cost": "NOT_APPLICABLE_DETERMINISTIC_ORACLE",
+  "accessibility_completion": "NOT_TESTED",
+  "restart_recovery": "NOT_TESTED",
+  "v2_candidate_admission": "NOT_IMPLEMENTED"
+}

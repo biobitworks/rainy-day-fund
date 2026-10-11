@@ -1,0 +1,13 @@
+*.mov
+*.mp4
+*.jpg
+*.jpeg
+*.png
+*.csv
+*.zip
+.env
+.env.*
+!*.example
+private_*/
+private/
+__pycache__/

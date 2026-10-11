@@ -5,18 +5,22 @@ Usage in two SEPARATE Python processes:
   python scripts/atlas_smoke.py read RDF-DEMO-20261011-001
 
 This script WILL WRITE only when explicitly invoked with 'write' and a
-configured ATLAS_MONGODB_URI. Not executed in the packaged local evaluation.
+configured MONGODB_URI or ATLAS_MONGODB_URI. No writes unless 'write' chosen.
 """
 import argparse, hashlib, json, os, sys
 from datetime import datetime, timezone
+from pathlib import Path
+sys.path.insert(0,str(Path(__file__).resolve().parents[1] / 'src'))
+from make_it_rain.config import load_env, database_uri
 
 p=argparse.ArgumentParser()
 p.add_argument('operation',choices=['write','read'])
 p.add_argument('run_id')
 a=p.parse_args()
-uri=os.getenv('ATLAS_MONGODB_URI')
+load_env()
+uri=database_uri()
 if not uri:
-    sys.exit('NOT_TESTED: ATLAS_MONGODB_URI not configured')
+    sys.exit('NOT_TESTED: MongoDB URI is not configured')
 try:
     from pymongo import MongoClient
 except ImportError:

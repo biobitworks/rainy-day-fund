@@ -1,0 +1,9 @@
+{
+  "status": "NOT_TESTED",
+  "blocker": "effective MONGODB_URI lacks username/password (preflight atlas_credentials_in_effective_uri=false); pymongo not installed",
+  "write_executed": false,
+  "readback_executed": false,
+  "import_file": "atlas_import_v2.jsonl",
+  "import_docs": 35,
+  "run_id": "RDF-V2-20261011T203543Z"
+}

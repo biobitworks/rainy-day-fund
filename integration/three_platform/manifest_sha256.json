@@ -1,0 +1,87 @@
+{
+  "project_id": "RDF-SFTW26-NEW-001",
+  "generated_utc": "2026-10-11T20:23:01.410611+00:00",
+  "type": "LOCAL_FILES_ONLY_NOT_REMOTE_PROVIDER_ATTESTATION",
+  "files": [
+    {
+      "name": "00_START_HERE.md",
+      "size_bytes": 3964,
+      "sha256": "ef9dc6f711fc830d819276ee02fc5b5df94dac3f4e6ee1b2ed021df6125294ea"
+    },
+    {
+      "name": "01_RAINDROP_JUDGES_AND_SIGNALS.md",
+      "size_bytes": 4921,
+      "sha256": "cbf4077e3c69ca7c6d05f034cffcda8bfd37cd8c7cd26ed263eb66b847791284"
+    },
+    {
+      "name": "01_fixture_integrity.ipynb",
+      "size_bytes": 7552,
+      "sha256": "3a3a0bb20ac0954b86b9636202c30711dac57cac6b60485147131fd9ae871a99"
+    },
+    {
+      "name": "02_ELEVENLABS_SETUP.md",
+      "size_bytes": 3754,
+      "sha256": "bf0c64ee2607226de6bf018ffdaf7a006223075f4016c15d41081cdac8e6ddb6"
+    },
+    {
+      "name": "03_CLAUDE_LINK_ALL_THREE.md",
+      "size_bytes": 3737,
+      "sha256": "463adbf28166701d1e9b2ce6385107e09c9b06f0f1cbdfeaff05fd951b23e951"
+    },
+    {
+      "name": "04_MONGODB_SETUP.md",
+      "size_bytes": 2630,
+      "sha256": "a3359072d913afe50aad523f935ec2cba2789fc30c56e289c6fe173efd0515e3"
+    },
+    {
+      "name": "atlas_readback_receipt.json",
+      "size_bytes": 1571,
+      "sha256": "60c3f277bc10708dacba0e2488280eabb5b9171241813f9a23137466ca5a0e1d"
+    },
+    {
+      "name": "atlas_ticket_fixtures.jsonl",
+      "size_bytes": 7624,
+      "sha256": "e03beb1a5118bee5f8532939043b7fa69092cc527cf600cba68f109c4f952dbe"
+    },
+    {
+      "name": "claude_seedgraph_magicbro_task.md",
+      "size_bytes": 2739,
+      "sha256": "6c74dddf7f90fac495eef766fc676bea15e41d1c71de70fa51bf12976fd49d11"
+    },
+    {
+      "name": "elevenlabs_knowledge_base.md",
+      "size_bytes": 2328,
+      "sha256": "673f2dd45ab4053cbc3cf664d9562b9e97a1b68e4ac6503b787cdd33282c927f"
+    },
+    {
+      "name": "elevenlabs_system_prompt.md",
+      "size_bytes": 2361,
+      "sha256": "6df06e5573a07281342b6258846b7682b3a7fb3c2b14991cfd583ff8e6335a81"
+    },
+    {
+      "name": "raindrop_eval_dataset.csv",
+      "size_bytes": 2111,
+      "sha256": "2a2d7dd3c24b48989ce2d6a56c7f02aaa39210ad8417ffb3e78cab84930d4081"
+    },
+    {
+      "name": "receipt_checks.py",
+      "size_bytes": 2120,
+      "sha256": "a637c0057cdd111131e74d0cae89920ead2cdf5e86dbdac7da4267ddf3fe55c7"
+    },
+    {
+      "name": "sample_integration_receipt.json",
+      "size_bytes": 559,
+      "sha256": "7d3d5e41961f8f128b4244385e7b570faae02b8288767ac0cae98eaf93340df7"
+    },
+    {
+      "name": "test_receipt_checks.py",
+      "size_bytes": 1122,
+      "sha256": "a53f798857d0fac35e489fe08e41218bc0fd9f0245316e0687a4ace21c72cda0"
+    },
+    {
+      "name": "tools_contract.json",
+      "size_bytes": 1777,
+      "sha256": "7550a6902ac66d77dd9b0d977a411de94c0ac2a9b95067a6607d03fa472cc7eb"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "receipt_id": "RDF-FIXTURE-ATLAS-READBACK-20261011-001",
+  "parent_manifest": "manifest_local.json",
+  "project_id": "RDF-SFTW26-NEW-001",
+  "official_atlas_project_id": "6acba49b5c102b1d2b95a0ac",
+  "database": "rainy_day_fund_sftw26",
+  "collection": "ticket_fixtures",
+  "source_version": "RDF-SYN-TICKET-20261011-V1",
+  "observed_at_utc": "2026-10-11T19:51:41.417007+00:00",
+  "execution_mode": "MongoDB Atlas connector, explicit insert_many then count/find",
+  "insert_many_return_count": 12,
+  "atlas_count_filtered": 12,
+  "atlas_find_return_count": 12,
+  "unique_readback_ids": 12,
+  "readback_ids": [
+    "RDF-SYN-001",
+    "RDF-SYN-002",
+    "RDF-SYN-003",
+    "RDF-SYN-004",
+    "RDF-SYN-005",
+    "RDF-SYN-006",
+    "RDF-SYN-007",
+    "RDF-SYN-008",
+    "RDF-SYN-009",
+    "RDF-SYN-010",
+    "RDF-SYN-011",
+    "RDF-SYN-012"
+  ],
+  "readback_split_counts": {
+    "dev": 6,
+    "heldout": 4,
+    "adversarial": 2
+  },
+  "readback_status": "UNEXECUTED_SCENARIO",
+  "first_readback_id": "RDF-SYN-001",
+  "last_readback_id": "RDF-SYN-012",
+  "not_verified": [
+    "full remote JSONL checksum",
+    "ElevenLabs webhook delivery",
+    "Raindrop cloud trace ingestion",
+    "Raindrop judge grading",
+    "physical process restart",
+    "live phone number",
+    "end-to-end correlated transcript"
+  ],
+  "canonical_file_sha256": "e03beb1a5118bee5f8532939043b7fa69092cc527cf600cba68f109c4f952dbe",
+  "remote_canonical_hash": "NOT_COMPUTED",
+  "mmr_root": "NOT_COMPUTED",
+  "signing": "NOT_SIGNED",
+  "outcome": "PASS_ATLAS_SYNTHETIC_FIXTURE_PERSISTENCE_NOT_E2E"
+}

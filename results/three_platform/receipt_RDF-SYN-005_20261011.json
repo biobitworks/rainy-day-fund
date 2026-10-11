@@ -1,0 +1,47 @@
+{
+  "project_id": "RDF-SFTW26-NEW-001",
+  "record_type": "THREE_PLATFORM_EXECUTION_RECEIPT",
+  "observed_at": "2026-10-11T20:48:51.271106+00:00",
+  "synthetic": true,
+  "case_id": "RDF-SYN-005",
+  "elevenlabs": {
+    "agent_id": "agent_8901m4pavnxve0z923t9aatsex9y",
+    "branch_id": "agtbrch_1501m4pavq3hfr39rztv626007p8",
+    "agent_id_source": "USER_REPORTED",
+    "conversation_id": null,
+    "tool_call_id": null,
+    "postcall_event_id": null,
+    "webhook_signature_valid": null,
+    "status": "NOT_TESTED",
+    "blocker": "no public HTTPS backend; ELEVENLABS_WEBHOOK_SECRET unset"
+  },
+  "backend": {
+    "endpoint_url": null,
+    "deployed": false,
+    "offline_tests": "15 passed, 1 warning in 0.67s",
+    "store_used_in_tests": "LOCAL_MEMORY/FILE_NOT_ATLAS"
+  },
+  "atlas": {
+    "ticket_id": null,
+    "readback": null,
+    "status": "NOT_TESTED",
+    "blocker": "effective MONGODB_URI has no credentials (preflight); user-reported independent query of 12 fixtures is not an app-level write/readback"
+  },
+  "raindrop": {
+    "local_sdk_emit": {
+      "event_id": "rdf-RDF-SYN-005-SYNTH-CONV-LOCAL-0001",
+      "sdk_version": "0.0.75",
+      "flush_called": true,
+      "conversation_id_is_placeholder": true,
+      "note": "synthetic offline tool record, not an ElevenLabs conversation, not Atlas"
+    },
+    "trace_id": null,
+    "cloud_readback": "NOT_TESTED",
+    "judge_run_id": null,
+    "blocker": "Raindrop MCP/Query API not authorized; SDK exposes no cloud trace id"
+  },
+  "correlated_e2e": "FAIL_NOT_ACHIEVED",
+  "e2e_status": "NOT_TESTED",
+  "signed": "NOT_SIGNED",
+  "mmr_root": "NOT_COMPUTED"
+}

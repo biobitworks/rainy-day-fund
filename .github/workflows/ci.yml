@@ -56,6 +56,21 @@ jobs:
           nbformat.write(result,target)
           print('ATLAS_HOSTED_TEST=NOT_TESTED; notebook protocol executed')
           PY
+      - name: Execute bounded model-proposal replay notebook
+        run: |
+          python - <<'PY'
+          import nbformat
+          from nbclient import NotebookClient
+          from pathlib import Path
+          source=Path('notebooks/02_bounded_model_adjudication.ipynb')
+          n=nbformat.read(source,as_version=4)
+          nbformat.validate(n)
+          result=NotebookClient(n,timeout=120,kernel_name='python3').execute(cwd=str(Path.cwd()))
+          out=Path('results/ci_bounded_model_adjudication.ipynb')
+          nbformat.write(result,out)
+          print('EXECUTED_MODEL_BOUNDARY_NOTEBOOK',out)
+          print('REAL_MODEL_INFERENCE=NOT_TESTED')
+          PY
       - name: Preserve test evidence
         uses: actions/upload-artifact@v4
         with:
@@ -63,4 +78,5 @@ jobs:
           path: |
             results/local_synthetic_evaluation.json
             results/ci_recursive_test_executed.ipynb
+            results/ci_bounded_model_adjudication.ipynb
           retention-days: 7

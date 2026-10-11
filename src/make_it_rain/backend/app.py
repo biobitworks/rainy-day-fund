@@ -35,6 +35,7 @@ class Config:
     tool_key: str
     webhook_secret: str
     agent_id: str
+    session_secret: str = ""  # MUST differ from tool_key and webhook_secret; empty => session routes fail closed
     telemetry: Callable[[dict], Any] = lambda rec: None  # sanitized trajectory sink
     clock: Callable[[], float] = time.time
 
@@ -77,11 +78,34 @@ def verify_signature(secret: str, header: str | None, raw: bytes, now_ts: float)
     return hmac.compare_digest(expect, v0)
 
 
+def issue_session_token(secret: str, session_id: str, ttl_s: int, now_ts: float) -> str:
+    """Backend-issued opaque principal: '<sid>.<exp>.<hmac>'. The LLM never mints one; it can only replay the
+    token its own conversation was given, so it cannot reach another session's tickets."""
+    exp = int(now_ts) + ttl_s
+    mac = hmac.new(secret.encode(), f"{session_id}.{exp}".encode(), hashlib.sha256).hexdigest()
+    return f"{session_id}.{exp}.{mac}"
+
+
+def verify_session_token(secret: str, token: str | None, now_ts: float) -> str | None:
+    if not secret or not token:
+        return None
+    try:
+        sid, exp, mac = token.rsplit(".", 2)
+        if int(exp) < now_ts or not re.fullmatch(r"[A-Za-z0-9_-]{8,64}", sid):
+            return None
+    except Exception:
+        return None
+    expect = hmac.new(secret.encode(), f"{sid}.{exp}".encode(), hashlib.sha256).hexdigest()
+    return sid if hmac.compare_digest(expect, mac) else None
+
+
 def sign(secret: str, raw: bytes, ts: int) -> str:  # test/helper only
     return f"t={ts},v0=" + hmac.new(secret.encode(), str(ts).encode() + b"." + raw, hashlib.sha256).hexdigest()
 
 
 def create_app(store, cfg: Config) -> FastAPI:
+    if cfg.session_secret and cfg.session_secret in (cfg.tool_key, cfg.webhook_secret):
+        raise ValueError("session_secret must be distinct from tool_key and webhook_secret")
     app = FastAPI(title="rdf-integration-backend", docs_url=None, redoc_url=None, openapi_url=None)
 
     def trace(tool: str, inp: dict, out: dict, started: float, case_id=None, conv=None):
@@ -103,12 +127,28 @@ def create_app(store, cfg: Config) -> FastAPI:
         except Exception:
             return None
 
+    def session_of(request: Request) -> str | None:
+        return verify_session_token(cfg.session_secret, request.headers.get("x-rdf-session"), cfg.clock())
+
+    def readback_flag() -> bool:  # only a real Atlas store may claim an Atlas readback
+        return store.kind == "ATLAS"
+
+    def respond(out: dict, code: int = 200):
+        return JSONResponse(out, status_code=code, headers={"X-RDF-Readback-Source": store.kind})
+
     def deny(code=401, status="UNAUTHORIZED"):
         return JSONResponse({"status": status}, status_code=code)
 
     @app.get("/healthz")
     def health():
         return {"status": "ok", "store": store.kind}
+
+    @app.post("/api/sessions")
+    async def issue_session(request: Request):
+        """DEMO issuance (tool-key protected). Production must bind this to real attendee authentication."""
+        if not tool_auth(request) or not cfg.session_secret: return deny()
+        sid = "S" + sha(f"{time.time_ns()}|{id(request)}".encode())[:24]
+        return {"session_id": sid, "session_token": issue_session_token(cfg.session_secret, sid, 3600, cfg.clock())}
 
     @app.post("/api/tools/lookup_guide")
     async def lookup_guide(request: Request):
@@ -124,17 +164,19 @@ def create_app(store, cfg: Config) -> FastAPI:
     @app.post("/api/tools/create_test_ticket")
     async def create_test_ticket(request: Request):
         if not tool_auth(request): return deny()
+        sid = session_of(request)
+        if sid is None: return deny(401, "UNAUTHORIZED")  # no backend-issued session => no ticket
         t0 = time.perf_counter(); req = await parse(request, CreateReq)
         conv = request.headers.get("x-rdf-conversation-id", "")[:80] or None  # optional extension header, outside contract body
         if req is None or req.case_id not in ALLOWED_CASES:
             return JSONResponse({"status": "REJECTED", "ticket_id": None, "state": "OPEN_TEST_ONLY", "atlas_readback": False}, status_code=422)
-        tid = "SMOKE-" + sha(f"{PROJECT_ID}|{req.idempotency_key}".encode())[:16]
+        tid = "SMOKE-" + sha(f"{PROJECT_ID}|{sid}|{req.idempotency_key}".encode())[:16]
         try:
             fx = store.get(FIXTURES, req.case_id)
             if fx is None or fx.get("synthetic") is not True:
                 raise StoreError("fixture missing")
             doc = {"_id": tid, "project_id": PROJECT_ID, "record_type": "INTEGRATION_SMOKE_TICKET",
-                   "ticket_id": tid, "case_id": req.case_id, "fixture_source_version": fx["source_version"],
+                   "ticket_id": tid, "case_id": req.case_id, "session_id": sid, "readback_source": store.kind, "fixture_source_version": fx["source_version"],
                    "state": "OPEN_TEST_ONLY", "idempotency_key": req.idempotency_key,
                    "conversation_id": conv, "created_at": now(), "synthetic": True,
                    "contains_personal_data": False, "predecessor_id": req.case_id}
@@ -152,32 +194,38 @@ def create_app(store, cfg: Config) -> FastAPI:
             out = {"status": "FAILED", "ticket_id": None, "state": "OPEN_TEST_ONLY", "atlas_readback": False}
             trace("create_test_ticket", {"case_id": req.case_id}, {**out, "error": str(e)[:40]}, t0, req.case_id, conv)
             return JSONResponse(out, status_code=503)
-        out = {"status": "SUCCEEDED", "ticket_id": tid, "state": rb["state"], "atlas_readback": True}
+        out = {"status": "SUCCEEDED", "ticket_id": tid, "state": rb["state"], "atlas_readback": readback_flag()}
         trace("create_test_ticket", {"case_id": req.case_id, "created_new": inserted}, out, t0, req.case_id, conv)
-        return out
+        return respond(out)
 
     @app.post("/api/tools/get_ticket_status")
     async def get_ticket_status(request: Request):
         if not tool_auth(request): return deny()
+        sid = session_of(request)
+        if sid is None: return deny(401, "UNAUTHORIZED")
         t0 = time.perf_counter(); req = await parse(request, StatusReq)
         if req is None: return JSONResponse({"status": "FAILED", "ticket_id": None, "state": None, "atlas_readback": False}, status_code=422)
         try:
             d = store.get(TICKETS, req.ticket_id)  # live store query, never echoes input
         except StoreError:
             return JSONResponse({"status": "FAILED", "ticket_id": None, "state": None, "atlas_readback": False}, status_code=503)
-        out = ({"status": "SUCCEEDED", "ticket_id": d["ticket_id"], "state": d["state"], "atlas_readback": True} if d
+        if d is not None and d.get("session_id") != sid:
+            d = None  # not the caller's ticket: indistinguishable from nonexistent (no existence oracle)
+        out = ({"status": "SUCCEEDED", "ticket_id": d["ticket_id"], "state": d["state"], "atlas_readback": readback_flag()} if d
                else {"status": "NOT_FOUND", "ticket_id": None, "state": None, "atlas_readback": False})
         trace("get_ticket_status", {"ticket_id": req.ticket_id}, out, t0, d and d.get("case_id"))
-        return out
+        return respond(out)
 
     @app.post("/api/tools/request_staff_escalation")
     async def request_staff_escalation(request: Request):
         if not tool_auth(request): return deny()
+        sid = session_of(request)
+        if sid is None: return deny(401, "UNAUTHORIZED")
         t0 = time.perf_counter(); req = await parse(request, EscalateReq)  # extra fields (e.g. staff_confirmed) rejected
         if req is None: return JSONResponse({"status": "REJECTED", "staff_confirmed": False}, status_code=422)
         try:
             d = store.get(TICKETS, req.ticket_id)
-            if d is None:
+            if d is None or d.get("session_id") != sid:  # same answer for missing and not-yours
                 return JSONResponse({"status": "REJECTED", "staff_confirmed": False}, status_code=404)
             ok = store.insert_if_absent(EVENTS, {"_id": f"EVT-{req.ticket_id}-esc-{req.reason_code}", "project_id": PROJECT_ID,
                 "ticket_id": req.ticket_id, "sequence": 2, "type": "STAFF_ESCALATION_REQUESTED",

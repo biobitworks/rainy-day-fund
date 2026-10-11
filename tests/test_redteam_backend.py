@@ -3,17 +3,19 @@ from pathlib import Path
 import pytest
 pytest.importorskip("fastapi")
 from fastapi.testclient import TestClient
-from make_it_rain.backend.app import Config, create_app, sign
+from make_it_rain.backend.app import Config, create_app, sign, issue_session_token
 from make_it_rain.backend.store import MemoryStore, TICKETS, WEBHOOKS, PARKED
 
 ROOT = Path(__file__).resolve().parents[1]
 FX = [json.loads(l) for l in (ROOT / "integration/three_platform/atlas_ticket_fixtures.jsonl").read_text().splitlines()]
 KEY, SEC, AG = "rt-key", "rt-secret", "agent_RT"
-H = {"x-rdf-tool-key": KEY}
+SS = "sess-secret-distinct"
+SESSION_TOKEN = issue_session_token("sess-secret-distinct", "SESSIONAAAA1", 4102444800, 0)
+H = {"x-rdf-tool-key": KEY, "x-rdf-session": SESSION_TOKEN}
 
 
 def mk(key=KEY, sec=SEC):
-    s = MemoryStore(FX); return s, TestClient(create_app(s, Config(key, sec, AG)))
+    s = MemoryStore(FX); return s, TestClient(create_app(s, Config(key, sec, AG, session_secret=SS)))
 
 
 def wh(conv="c1", extra=None, ts=None):

@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 pytest.importorskip("fastapi")
 from fastapi.testclient import TestClient
-from make_it_rain.backend.app import Config, create_app, sign
+from make_it_rain.backend.app import Config, create_app, sign, issue_session_token
 from make_it_rain.backend.store import FaultyStore, MemoryStore
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,7 +14,9 @@ CONTRACT = json.loads((ROOT / "integration/three_platform/tools_contract.json").
 FX = [json.loads(l) for l in (ROOT / "integration/three_platform/atlas_ticket_fixtures.jsonl").read_text().splitlines()]
 TOOLS = {t["name"]: t for t in CONTRACT["tools"]}
 KEY = "k-test"
-H = {"x-rdf-tool-key": KEY}
+SS = "sess-secret-distinct"
+SESSION_TOKEN = issue_session_token("sess-secret-distinct", "SESSIONAAAA1", 4102444800, 0)
+H = {"x-rdf-tool-key": KEY, "x-rdf-session": SESSION_TOKEN}
 
 
 def enum_of(tool): return set(TOOLS[tool]["response"]["status"].split("|"))
@@ -22,7 +24,7 @@ def keys_of(tool): return set(TOOLS[tool]["response"])
 
 
 def client(store=None):
-    return TestClient(create_app(store or MemoryStore(FX), Config(KEY, "s", "agent_T")))
+    return TestClient(create_app(store or MemoryStore(FX), Config(KEY, "s", "agent_T", session_secret=SS)))
 
 
 def check(tool, r):
@@ -73,7 +75,7 @@ def test_store_failure_responses_match_contract(fail):
 def test_success_shapes_and_states():
     c = client()
     r = c.post("/api/tools/create_test_ticket", headers=H, json={"case_id": "RDF-SYN-005", "idempotency_key": "idem-conf-5"}).json()
-    assert r["state"] == "OPEN_TEST_ONLY" and r["atlas_readback"] is True and set(r) == keys_of("create_test_ticket")
+    assert r["state"] == "OPEN_TEST_ONLY" and r["atlas_readback"] is False and set(r) == keys_of("create_test_ticket")
     s = c.post("/api/tools/get_ticket_status", headers=H, json={"ticket_id": r["ticket_id"]}).json()
     assert set(s) == keys_of("get_ticket_status")
 

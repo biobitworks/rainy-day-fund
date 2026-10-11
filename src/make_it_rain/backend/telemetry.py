@@ -4,11 +4,34 @@ A returned SDK/trace id proves local SDK registration only; cloud receipt needs 
 from __future__ import annotations
 import datetime as dt
 
+import json
+from pathlib import Path
+
 PROJECT_ID = "RDF-SFTW26-NEW-001"
+_FIXTURES = Path(__file__).resolve().parents[3] / "integration/three_platform/atlas_ticket_fixtures.jsonl"
+
+
+class ExportDenied(Exception):
+    """Raised before any SDK call when input is not admitted as synthetic-only."""
+
+
+def _frozen_inputs() -> dict[str, str]:
+    return {d["_id"]: d["scenario_input"] for d in map(json.loads, _FIXTURES.read_text().splitlines()) if d.get("synthetic") is True}
+
+
+def admit_export(case_id: str, user_message: str, privacy_class: str) -> None:
+    """Default deny. Only an explicit SYNTHETIC_ONLY class AND text equal to the frozen synthetic fixture input
+    for that case (optionally prefixed 'SYNTHETIC: ') may leave the process."""
+    if privacy_class != "SYNTHETIC_ONLY":
+        raise ExportDenied("privacy_class must be SYNTHETIC_ONLY")
+    expected = _frozen_inputs().get(case_id)
+    if expected is None or user_message.removeprefix("SYNTHETIC: ") != expected:
+        raise ExportDenied("input is not the frozen synthetic fixture text for this case")
 
 
 class RaindropCase:
-    def __init__(self, write_key: str, case_id: str, conversation_id: str, user_message: str, model: str = "elevenlabs-agent"):
+    def __init__(self, write_key: str, case_id: str, conversation_id: str, user_message: str, model: str = "elevenlabs-agent", privacy_class: str = "UNKNOWN"):
+        admit_export(case_id, user_message, privacy_class)  # before SDK import/init
         if not user_message.strip():
             raise ValueError("current user message must be nonempty")
         import raindrop.analytics as rd

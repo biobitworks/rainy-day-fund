@@ -1,0 +1,37 @@
+{
+  "benchmark_id": "RDF-LOOKUP-LOCAL-001",
+  "project_id": "RDF-SFTW26-NEW-001",
+  "source_version": "RDF-LOCAL-FCO-FCG-CANDIDATE-V1",
+  "task": "exact_row_id_to_priority_lookup",
+  "dataset_rows": 4000,
+  "query_count_per_run": 360,
+  "repeated_runs": 5,
+  "random_seed": 26011,
+  "index_build_ms": 0.345411,
+  "linear_scan_ms_by_run": [
+    22.121906,
+    22.877014,
+    22.06562,
+    22.704474,
+    22.566315
+  ],
+  "index_lookup_ms_by_run": [
+    0.08654,
+    0.074612,
+    0.067331,
+    0.098308,
+    0.21881
+  ],
+  "baseline_median_ms": 22.566315,
+  "indexed_median_ms": 0.08654,
+  "observed_speedup_x": 260.762,
+  "correctness": "PASS_SAME_RESULTS",
+  "environment": "local_python_in_memory",
+  "claim_ceiling": "INDEXED_LOOKUP_ONLY_NOT_AGENT_RESOLUTION_OR_FCO_PERFORMANCE",
+  "elevenlabs": "NOT_TESTED",
+  "raindrop": "NOT_TESTED",
+  "ollarma": "NOT_EXECUTED",
+  "data_provenance": "user_supplied_archive_local; Kaggle license attribution still under review",
+  "successor_of": "evidence/2026-10-11/lookup_benchmark.json first published commit 786a8d74b2f940b2144e8f327ebc6099c4438843",
+  "correction_reason": "First public version contained three manually transcribed run timings that did not match the executed notebook; this successor contains exact observed values."
+}

@@ -1,0 +1,16 @@
+{
+  "project_id": "RDF-SFTW26-NEW-001",
+  "public_release_scope": "newly_authored_code_and_aggregates_only",
+  "published_media_count": 0,
+  "published_raw_ticket_count": 0,
+  "private_compressed_video_count": 4,
+  "original_video_bytes": 326299686,
+  "compressed_video_bytes": 5266623,
+  "compression_pct": 98.39,
+  "full_privacy_review": "NOT_TESTED",
+  "event_participant_consent": "NOT_VERIFIED",
+  "raw_media_status": "WITHHELD_FROM_PUBLIC_REPO",
+  "canonical_FCO_FCG_admission": "NOT_TESTED",
+  "MMR": "NOT_COMMITTED",
+  "signing": "NOT_SIGNED"
+}

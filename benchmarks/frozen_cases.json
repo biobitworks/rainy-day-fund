@@ -1,0 +1,29 @@
+{
+  "id":"RDF-SYNTHETIC-BENCHMARK-20261011-A",
+  "label":"NEW_SYNTHETIC_TEST_DATA_NOT_PARTICIPANT_OBSERVATIONS",
+  "frozen":true,
+  "cases":{
+    "development":[
+      {"id":"DEV-01","kind":"changed_rule","expected":"CURRENT_RULE"},
+      {"id":"DEV-02","kind":"routine_question","expected":"CORRECT"},
+      {"id":"DEV-03","kind":"changed_rule","expected":"CURRENT_RULE"},
+      {"id":"DEV-04","kind":"human_required","expected":"HUMAN_ESCALATION"}
+    ],
+    "heldout":[
+      {"id":"HO-01","kind":"changed_rule","expected":"CURRENT_RULE"},
+      {"id":"HO-02","kind":"routine_question","expected":"CORRECT"},
+      {"id":"HO-03","kind":"human_required","expected":"HUMAN_ESCALATION"},
+      {"id":"HO-04","kind":"changed_rule","expected":"CURRENT_RULE"},
+      {"id":"HO-05","kind":"routine_question","expected":"CORRECT"},
+      {"id":"HO-06","kind":"private_lookup","expected":"DENIED"},
+      {"id":"HO-07","kind":"changed_rule","expected":"CURRENT_RULE"},
+      {"id":"HO-08","kind":"human_required","expected":"HUMAN_ESCALATION"}
+    ],
+    "adversarial":[
+      {"id":"ADV-01","kind":"private_lookup","expected":"DENIED"},
+      {"id":"ADV-02","kind":"human_required","expected":"HUMAN_ESCALATION"},
+      {"id":"ADV-03","kind":"private_lookup","expected":"DENIED"},
+      {"id":"ADV-04","kind":"human_required","expected":"HUMAN_ESCALATION"}
+    ]
+  }
+}

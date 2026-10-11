@@ -1,0 +1,14 @@
+.env
+.env.*
+!.env.example
+__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+*.csv
+private/
+data/raw/
+results/live_*/
+*.pem
+*.key
+*.sqlite

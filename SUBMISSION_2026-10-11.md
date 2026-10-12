@@ -21,9 +21,9 @@
 | Accessible dashboard | https://github.com/biobitworks/rainy-day-fund/blob/review-20261011/public/index.html | Frontend source; live behavior unverified |
 | Static public evidence walkthrough | https://rainy-day-fund-sftw26.vercel.app/ | Production static walkthrough, not connected dashboard |
 | Separate protected preview | https://rainy-day-fund-sftw26-cohw995ik-biobitworks.vercel.app/ | Preview route smoke was reported; protected by Vercel SSO |
-| One-minute YouTube video | **PENDING—insert actual public video URL after upload and verification** | Do not invent a link |
+| YouTube demo video | https://youtu.be/EJx0vBP40A4 | URL supplied by project owner; anonymous playback, public visibility and exact duration **NOT_INDEPENDENTLY_VERIFIED** |
 
-> Use the public static walkthrough for an accessible public link. Do not advertise the protected preview as an unauthenticated, working app. A video being edited or recorded is not a publicly verifiable video permalink.
+> Use the public static walkthrough for an accessible public link. Do not advertise the protected preview as an unauthenticated, working app. The YouTube video URL is supplied by the project owner and linked above; independent anonymous-viewing and public-visibility checks remain pending.
 
 ## Suggested submission text (accurate claim ceiling)
 
@@ -94,7 +94,7 @@ A public 60-second video should show **what was genuinely observed**, and put `N
 - **0:43–0:54 — Recursive harness:** Show a frozen baseline, bounded candidate, tested result, and policy admit/reject using actual synthetic receipts. Avoid claiming real-world speedups.
 - **0:54–1:00 — Honest finish:** Public Vercel evidence walkthrough, protected preview, remaining integration block and repository URL.
 
-Before publishing, verify the exact YouTube video is public and one minute long; check permissions, license/attribution, absent secrets, participant consent and an actually reachable URL. Do not insert an unverified URL.
+The owner supplied the YouTube video URL. Before treating it as independently public and submission-ready, verify anonymous playback, one-minute duration, permissions, license/attribution, absence of secrets, participant consent and a reachable URL.
 
 ## Next integration gate (not a submission success claim)
 

@@ -2,7 +2,7 @@
 
 **Primary track:** Recursive Harnessing · **Project:** `RDF-SFTW26-NEW-001` · **Database:** `rainy_day_fund_sftw26`
 
-[Project submission packet](SUBMISSION_2026-10-11.md) · [Public app walkthrough](https://rainy-day-fund-sftw26.vercel.app/) · [Machine-readable activity snapshot](evidence/2026-10-11/project_activity_feed.json) · [Reproducible public evidence](evidence/2026-10-11/README.md)
+[YouTube demo video](https://youtu.be/EJx0vBP40A4) · [Project submission packet](SUBMISSION_2026-10-11.md) · [Public app walkthrough](https://rainy-day-fund-sftw26.vercel.app/) · [Machine-readable activity snapshot](evidence/2026-10-11/project_activity_feed.json) · [Reproducible public evidence](evidence/2026-10-11/README.md)
 
 ## What judges can inspect
 
@@ -31,7 +31,7 @@ The JSON snapshot lists each **stored record ID, source version, source event ti
 - A Raindrop Cloud trace and Judge result independently linked to the same conversation.
 - A functioning production live-updating Vercel ticket dashboard or measured end-to-end response-time gain.
 - Canonical FCO/FCG admission, MMR commitment or an authorized signature.
-- A completed submission on the event portal or a verified public one-minute video URL.
+- A completed event-portal submission or independent verification of the supplied YouTube link's public visibility and exact duration.
 
 ## Why the uploaded organization audit log was excluded
 

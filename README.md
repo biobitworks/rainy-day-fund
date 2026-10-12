@@ -9,7 +9,7 @@
 - **[Machine-readable Atlas project activity snapshot](evidence/2026-10-11/project_activity_feed.json)**
 - **[Full implemented backend, tests and accessible live-dashboard source (`review-20261011`)](https://github.com/biobitworks/rainy-day-fund/tree/review-20261011)**
 - **[Protected Vercel preview](https://rainy-day-fund-sftw26-cohw995ik-biobitworks.vercel.app/)** — reported route smoke; `UNCONFIGURED_FAIL_CLOSED`; not a public working integration
-- **YouTube 60-second demonstration:** PENDING video editing and a real public URL; no video permalink claimed.
+- **[Watch the Make It Rain demo video on YouTube](https://youtu.be/EJx0vBP40A4)** — user-provided link; anonymous playback, visibility and exact runtime not independently verified.
 
 | Platform | Work completed | Honest boundary |
 |---|---|---|
@@ -27,6 +27,7 @@ Make It Rain is an evidence-first, accessible event-support assistant prototype.
 
 ## Links
 
+- [YouTube demo video](https://youtu.be/EJx0vBP40A4)
 - [Deployed evidence walkthrough](https://rainy-day-fund-sftw26.vercel.app)
 - [Evidence and limitations](evidence/2026-10-11/README.md)
 - [Corrected measured lookup benchmark](evidence/2026-10-11/lookup_benchmark_v2_corrected.json)
